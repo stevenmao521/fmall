@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+    {include file="common/head"/}
+    <style>
+        .left-icon {
+            margin-left: 3vw;
+            width: 9vw;
+            height: 9vw;
+        }
+        .left-icon img {
+            width: 100%;
+            height: 100%;
+        }
+        .left-icon canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gray ">
+    <section class="head-wrap">
+        <div class="head-swiper">
+            <div class="swiper-container" id="head-swiper">
+                <div class="swiper-wrapper">
+                    {volist name="ads_lamp" id="item"}
+                        <div class="swiper-slide"><a href="{$item.url}"><img src="__PUBLIC__/{$item.adpic}" /></a></div>
+                    {/volist}
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination" id="head-swiper-pagination"></div>
+            </div>
+        </div>
+        <div class="home_ban">
+            {volist name="ads_news" id="item"}
+                <li><a href="{$item.url}"><img src="__PUBLIC__/{$item.adpic}" /></a></li>
+            {/volist}
+        </div>
+        <div class="h25"> </div>
+    </section>
+
+    {if condition="$user.level eq 1"}
+    <a href="{:url('Mall/detail',array('id'=>$first['id']))}">
+    <section class="category-wrap">
+        <div class="home_sg">
+            <p>首购有礼</p>
+            <span class="tips">* 仅限新会员购买 *</span>
+        </div>
+        <div class="home_sgsp">
+            <li><span class="pic_tips">{$first.tag_name}</span><img src="__PUBLIC__/{$first.pic}" /></li>
+            <li class="title">{$first.name}</li>
+            <li class="jiage">¥ <span>{$first.price}</span><span class="fr tips">{$first.selnums}人已购买</span></li>
+        </div>
+    </section>
+    </a>
+    {elseif condition="$user.level gt 1"}
+    <section class="category-wrap">
+        <a href="{:url('Mall/lists')}">
+        <div class="home_sg">
+            <p>VIP复购</p>
+            <span class="tips">* 仅限VIP会员购买 *</span>
+        </div>
+        </a>
+        {volist name="slist" id="item"}
+        <a href="{:url('Mall/detail',array('id'=>$item['id']))}">
+            <div class="home_fugou">
+                <li class="img"><span class="pic_tips">{$item.tag_name}</span><img src="__PUBLIC__/{$item.pic}" /></li>
+                <li class="title">{$item.name}</li>
+                <li class="jiage">¥ <span>{$item.reprice}</span><span class="fr tips">{$item.selnums}人已购买</span></li>
+            </div>
+            <div class="tips_x"></div>
+        </a>
+        {/volist}
+    </section>
+    {else/}
+    <a href="{:url('Mall/detail',array('id'=>$first['id']))}">
+    <section class="category-wrap">
+        <div class="home_sg">
+            <p>首购有礼</p>
+            <span class="tips">* 仅限新会员购买 *</span>
+        </div>
+        <div class="home_sgsp">
+            <li><span class="pic_tips">{$first.tag_name}</span><img src="__PUBLIC__/{$first.pic}" /></li>
+            <li class="title">{$first.name}</li>
+            <li class="jiage">¥ <span>{$first.price}</span><span class="fr tips">{$first.selnums}人已购买</span></li>
+        </div>
+    </section>
+    </a>
+    <section class="category-wrap">
+        <a href="{:url('Mall/lists')}">
+        <div class="home_sg">
+            <p>VIP复购</p>
+            <span class="tips">* 仅限VIP会员购买 *</span>
+        </div>
+        </a>
+        {volist name="slist" id="item"}
+        <a href="{:url('Mall/detail',array('id'=>$item['id']))}">
+            <div class="home_fugou">
+                <li class="img"><span class="pic_tips">{$item.tag_name}</span><img src="__PUBLIC__/{$item.pic}" /></li>
+                <li class="title">{$item.name}</li>
+                <li class="jiage">¥ <span>{$item.reprice}</span><span class="fr tips">{$item.selnums}人已购买</span></li>
+            </div>
+            <div class="tips_x"></div>
+        </a>
+        {/volist}
+    </section>
+    {/if}
+
+    <div style="height:1.45rem"></div>
+    {include file="common/foot"/}
+</body>
+<script src="__STATIC__/bee/js/jquery.min.js"></script>
+<script src="__STATIC__/bee/js/circleChart.min.js"></script>
+<script>
+    let size = $(".left-icon").width()
+    $(".left-icon").circleChart({
+        size: size,
+        value: 50,
+        color: "#209e85",
+    });
+    $('.zhuanti-list .chufa').on('click', function () {
+        $(this).parents('.item').toggleClass('open');
+        // $(this).parents('.item-h').siblings('.item-b').slideToggle();
+    })
+    $('.bottom-tab-wrap .item').on('click', function () {
+        if ($(this).hasClass('active'))
+            return false;
+        $(this).addClass('active').siblings().removeClass('active')
+    })
+</script>
+<script>
+    var swiper = new Swiper('#head-swiper', {
+        pagination: {
+            el: '#head-swiper-pagination',
+            clickable: true,
+        },
+    });
+    var swiper = new Swiper('.live-swiper', {
+        slidesPerView: 'auto',
+    });
+    new Swiper('#nav-swiper', {
+        slidesPerView: 4.6,
+        spaceBetween: 0,
+    });
+</script>
+</html>

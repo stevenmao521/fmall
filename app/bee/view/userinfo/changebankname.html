@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+{include file="common/head"/}
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="account-form">
+                <div class="account-form-group">
+                    <input type="text" maxlength="30" class="account-form-control " placeholder="请输入开户行" id="nickname">
+                </div>
+                <div class="account-form-group button-row">
+                    <a class="account-btn on" href="javascript:;" onClick="save_name();">保存</a>
+                </div>
+            </div>
+            <div class="account-form-group  err-tips-box" >
+                <div class="err-tips" id="errMsg" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    function save_name() {
+        var nickname = $('#nickname').val();
+        $.ajax({
+            url:"{:url('Userinfo/changebankname')}",
+            type:'post',
+            dataType:'json',
+            data:{nickname:nickname,ispost:1},
+            success:function(data){
+                if (data.code == 1) {
+                    //绑定成功跳转个人中心
+                    location.href = "{:url('Userinfo/info')}";
+                } else {
+                    errMsg(data.msg);
+                }
+            }
+        });
+    }
+    
+    function errMsg(txt) {
+        $('#errMsg').html(txt);    
+        $('#errMsg').fadeIn();    
+        setTimeout(function() {    
+            $('#errMsg').fadeOut();    
+        }, 2000);
+    }
+</script>

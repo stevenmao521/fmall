@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+{include file="common/head"/}
+</head>
+
+<body class="bg-gray ">
+    <div class="wrapper">
+        <div class="address-list">
+            
+            {volist name="list" id="item"}
+            <div class="address">
+                <div class="address-head">
+                    <p class="title">{$item.uname}</p>
+                    {if condition="$item.isdef eq 1"}
+                    <a class="default opt" href="#">默认地址</a>
+                    {/if}
+                </div>
+                <div class="address-body">
+                    <ul class="clearfix">
+                        <li>
+                            <div class="left">手机号码：</div>
+                            <div class="right">{$item.mobile}</div>
+                        </li>
+                        <li>
+                            <div class="left">收货地址：</div>
+                            <div class="right">{$item.pro_city_reg} {$item.detail}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="address-foot clearfix">
+                    <a class="btn" href="javascript:;" onClick="del({$item.id});"><img class="icon" src="__STATIC__/bee/img/img27.png" />删除</a>
+                    <a class="btn" href="{:url('userinfo/editaddress',array('id'=>$item['id']))}"><img class="icon" src="__STATIC__/bee/img/img26.png" />编辑</a>
+                </div>
+            </div>
+            {/volist}
+        </div>
+    </div>
+
+    <div class="page-foot-btn-box">
+        <a class="page-foot-btn" href="{:url('Index/index')}">
+            <i class="icon icon_plus"></i> 返回首页
+        </a>
+		<a class="page-foot-btn" href="{:url('Userinfo/addaddress')}">
+            <i class="icon icon_plus"></i> 添加新地址
+        </a>
+    </div>
+</body>
+
+</html>
+<script>
+    function del(id) {
+        if(confirm('确实要删除吗?')) {
+            $.ajax({
+                url:"{:url('Userinfo/deladdress')}",
+                type:'post',
+                dataType:'json',
+                data:{id:id},
+                success:function(data){
+                    if (data.code == 1) {
+                        location.reload();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+</script>

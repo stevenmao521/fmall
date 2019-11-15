@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        {include file="common/head"/}
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            .home{
+                box-sizing: border-box;
+                background: #F2F2F2;
+            }
+            ul {
+                list-style: none;
+            }
+            .fle-center{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .fle-ali{
+                display: flex;
+                align-items: center;
+            }
+            .fle-space{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .yel-color {
+                color: #FE920C
+            }
+            .c9{
+                color: #999;
+            }
+            .c6{
+                color: #666;
+            }
+            .cate{
+                height: 1.2rem;
+                border-bottom: #e5e5e5 1px solid;
+                font-size: 0.45rem;
+                background: #fff;
+            }
+            .cate>li{
+                height: 1.2rem;
+                line-height: 1.3rem;
+                width: 25%;
+                text-align: center;
+            }
+            .active{
+                color: #FEA33F;
+                border-bottom: #FEA33F 2px solid;
+            }
+            .box{
+                background: #fff;
+                margin-bottom: 0.5rem;
+                font-size: 0.4rem
+            }
+            .cont-top{
+                height: 1.3rem;
+                padding: 0 0.3rem;
+                border-bottom: #e5e5e5 1px solid;
+            }
+            .cont-cen{
+                border-bottom: #F5F5F5 1px solid;
+                padding: 0 0.3rem;
+                margin-top:0.2rem;
+                margin-bottom:0.2rem;
+            }
+            .cont-cen>img{
+                width: 2.5rem;
+            }
+            .cont-cen>p{
+                margin-left: 0.3rem
+            }
+            .cont-bot{
+                padding: 0 .3rem .3rem .3rem
+            }
+            .cont-bot>span{
+                font-size: 0.5rem
+            }
+            .a-active{color: #FEA33F;text-decoration: none;}
+            .a-noactive{color: #666;text-decoration: none;}
+        </style>
+    </head>
+
+    <body class="home">
+        <!-- 分类 -->
+        <ul class="cate fle-space c6">
+            <li {if condition="$type eq 'all'"}class="active"{/if}><a class="" href="{:url('Userinfo/myorder',array('type'=>'all'))}">全部</a></li>
+            <li {if condition="$type eq 'send'"}class="active"{/if}><a class="" href="{:url('Userinfo/myorder',array('type'=>'send'))}">待发货</a></li>
+            <li {if condition="$type eq 'hassend'"}class="active"{/if}><a class="" href="{:url('Userinfo/myorder',array('type'=>'hassend'))}">已发货</a></li>
+            <li {if condition="$type eq 'finish'"}class="active"{/if}><a class="" href="{:url('Userinfo/myorder',array('type'=>'finish'))}">已完成</a></li>
+        </ul>
+        <!-- 内容 -->
+        
+        {volist name='order_list' id='item'}
+        <div class="box" no="{$item.id}">
+            <div class="cont-top fle-space">
+                <p class="fle-center">
+                    <span class="c6"><span class="c9">下单时间：</span>{$item.createtime}</span>
+                </p>
+                <P class="yel-color">{$item.status}</P>
+            </div>
+            <div class="cont-cen fle-ali">
+                <img style="margin-bottom:0.2rem;" src="__PUBLIC__{$item.pic}" />
+                <p>{$item.product_name}</p>
+            </div>
+            <div class="cont-bot fle-ali c9">
+                合计：<span class="yel-color">￥{$item.total_price}</span>
+            </div>
+        </div>
+        {/volist}
+    </body>
+    
+    <div style="height:1.45rem"></div>
+    {include file="common/footucenter"/}
+    
+    <script>
+        $(".box").click(function(){
+            var no = $(this).attr('no');
+            location.href = "{:url('Userinfo/orderdetail')}?id="+no;
+	});
+    </script>
+</html>

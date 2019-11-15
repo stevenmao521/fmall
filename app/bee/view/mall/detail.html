@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+    {include file="common/head"/}
+    <style>
+        .left-icon {
+            margin-left: 3vw;
+            width: 9vw;
+            height: 9vw;
+        }
+        .left-icon img {
+            width: 100%;
+            height: 100%;
+        }
+        .left-icon canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+    </head>
+    <body class="bg-gray ">
+        <section class="category-wrap2">
+            <div class="home_sgsp">
+                <li><img src="__PUBLIC__{$product.pic}" /></li>
+                <li class="title">{$product.name}</li>
+                {if condition="$info.level eq 1"}
+                <li class="jiage">¥ <span>{$product.price}</span><span class="fr tips">{$product.selnums}人已购买</span></li>
+                {else/}
+                <li class="jiage">¥ <span>{$product.reprice}</span><span class="fr tips">{$product.selnums}人已购买</span></li>
+                {/if}
+            </div>
+        </section>
+
+        <section class="category-wrap3">
+            <div class="home_sg">
+                <p>产品介绍</p>
+            </div>
+            <div class="info">
+				{if condition="$product.video"}
+                <video src="__PUBLIC__{$product.video}" controls width="400" height="300"></video>
+				{/if}
+                {$product.describe}
+            </div>
+        </section>
+
+
+        <div style="height:1.45rem"></div>
+        <div class="bottom-tab-wrap flex">
+            <div class="item jdjz" id="home">
+                <img class="no-active-icon" src="__STATIC__/bee/img/nav6.png" alt="" srcset="">
+                <p>回首页</p>
+            </div>
+            <div class="item jdjz" id="cart">
+                <img class="no-active-icon" src="__STATIC__/bee/img/nav7.png" alt="" srcset="">
+                <p>购物车</p>
+            </div>
+
+            <div class="jdjz btn_gwc btn_gwc2" onClick="add_cart({$product.id});">
+                <p>加入购物车</p>
+            </div>
+            <div class="jdjz btn_gwc" onClick="buy_now({$product.id});">
+                <p>立即购买</p>
+            </div>
+        </div>
+    </body>
+    <script src="__STATIC__/bee/js/jquery.min.js"></script>
+
+    <script>
+        $('#home').click(function(){
+            location.href = "{:url('Index/index')}";
+        });
+        $('#cart').click(function(){
+            location.href = "{:url('Mall/cart')}";
+        });
+        
+        var swiper = new Swiper('#head-swiper', {
+            pagination: {
+                el: '#head-swiper-pagination',
+                clickable: true,
+            },
+        });
+        var swiper = new Swiper('.live-swiper', {
+            slidesPerView: 'auto',
+        });
+        new Swiper('#nav-swiper', {
+            slidesPerView: 4.6,
+            spaceBetween: 0,
+        });
+        
+        //加入购物车
+        function add_cart(id) {
+            $.ajax({
+                url:"{:url('Mall/addcart')}",
+                type:'post',
+                dataType:'json',
+                data:{id:id},
+                success:function(data){
+                    if (data.code == 1) {
+                        alert(data.msg);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+        
+        //立即购买
+        function buy_now(id) {
+            $.ajax({
+                url:"{:url('Mall/addordernow')}",
+                type:'post',
+                dataType:'json',
+                data:{id:id},
+                success:function(data){
+                    if (data.code == 1) {
+                        //跳转订单详情页
+                        location.href = "{:url('Mall/orderdetail')}";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    </script>
+</html>

@@ -1,0 +1,169 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href='{:url("index")}'>{:lang('list')}</a></li>
+            <li><a href='{:url("log")}'>{:lang('loglist')}</a></li>
+            <li><a href='{:url("trash")}'>{:lang('trash')}</a></li>
+        </ul>
+    </div>
+    
+    <!-- 筛选列表 -->
+    <div class="demoTable layui-form">
+        <div class="layui-form-item" id="search_box" >
+            {$html_str}
+        </div>
+        <blockquote class="layui-elem-quote">
+            <button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="delAll">{:lang('delall')}</button>
+            <button type="button" class="layui-btn layui-btn-small layui-btn-primary" id="export">{:lang('export')}</button>
+            <a href="{:url('add')}" class="layui-btn layui-btn-small layui-bg-blue">{:lang('add')}</a>
+            <button class="layui-btn layui-btn-small" id="search" data-type="reload" style="float:right;">{:lang('search')}</button>
+            <a href="{:url('index')}" class="layui-btn layui-btn-small" style="float:right;">{:lang('clear')}</a>
+        </blockquote>
+    </div>
+    {if condition='$count_html1'}
+        <table class="layui-table" lay-size="sm">
+            <thead>
+                <tr>
+                    <th width="50">合计项</th>
+                    {$count_html1}
+                </tr> 
+            </thead>
+            <tbody>
+                <td>合计</td>
+                {$count_html2}
+            </tbody>
+        </table>
+    {/if}
+    <!--列表-->
+    <table class="layui-table" id="list" lay-filter="list">
+    </table>
+</div>
+<!--action 操作-->
+<script type="text/html" id="action">
+    {if $olist}
+    <a class="layui-btn layui-btn-mini" lay-event="olist" >清单列表</a>
+    {/if}
+    <a href="{:url('edit')}?id={{d.id}}" class="layui-btn layui-btn-mini">{:lang('edit')}</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">{:lang('del')}</a>
+</script>
+
+<script type="text/html" id="order">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input order" value=" {{d.listorder}}" size="10" />
+</script>
+<!--字段js模版-->
+{$js_tmp}
+
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element','layer'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var layer = layui.layer;
+        {$js_date}
+        var table = layui.table, $ = layui.jquery;
+        var tableIn = table.render({
+            id: 'user',
+            elem: '#list',
+            url: '{:url("index")}',
+            method: 'post',
+            page: true,
+            cols: [[
+                {checkbox:true,fixed: true},
+                //服务端赋值字段
+                {$js_str}
+                {field: 'listorder', title: '{:lang("order")}', width: 100, sort: true,templet: '#order'},
+                {width: 180, align: 'center', toolbar: '#action',fixed:'right'}
+            ]
+            ],
+            done: function(res, curr, count){
+                {$count_js}
+            },
+            limit: 10 //每页默认显示的数量
+            ,size: 'sm' //小尺寸的表格
+        });
+        
+        $('body').on('blur','.order',function() {
+            var id = $(this).attr('data-id');
+            var listorder = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("listOrder")}',{id:id,listorder:listorder,moduleid:"{:input('id')}"},function(res){
+                layer.close(loading);
+                if(res.code===1){
+                    layer.msg(res.msg,{time:1000,icon:1});
+                    tableIn.reload();
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        });
+        
+        //搜索
+        $('#search').on('click', function() {
+            {$js_val}
+            tableIn.reload({
+                {$js_where}
+            });
+        });
+        
+        //导出
+        $('#export').on('click', function() {
+            {$js_val}
+            $.ajax({
+                url:'{:url("Export/index")}',
+                data:{{$js_ewhere},id:{$moduleid}},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    location.href = '{:url("Export/index")}&from=1';
+                },
+                error:function(data){
+                    location.href = '{:url("Export/index")}&from=1';
+                }
+            });
+        });
+        
+        //表格事件
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('您确定要删除该数据吗？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('listDel')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code===1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            tableIn.reload();
+                        }else{
+                            layer.msg('操作失败！',{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+        $('#delAll').click(function(){
+            layer.confirm('确认要删除选中信息吗？', {icon: 3}, function(index) {
+                layer.close(index);
+                var checkStatus = table.checkStatus('user'); //test即为参数id设定的值
+                var ids = [];
+                $(checkStatus.data).each(function (i, o) {
+                    ids.push(o.id);
+                });
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post("{:url('delall')}", {ids: ids}, function (data) {
+                    layer.close(loading);
+                    if (data.code === 1) {
+                        layer.msg(data.msg, {time: 1000, icon: 1});
+                        tableIn.reload();
+                    } else {
+                        layer.msg(data.msg, {time: 1000, icon: 2});
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>

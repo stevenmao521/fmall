@@ -1,0 +1,30 @@
+<div class="bottom-tab-wrap flex">
+    <div class="item jdjz" id='home'>
+        <img class="no-active-icon" src="__STATIC__/bee/img/nav2.png" alt="" srcset="">
+        <img class="active-icon" src="__STATIC__/bee/img/nav2_active.png" alt="" srcset="">
+        <p>蜂蜜商城</p>
+    </div>
+    <div class="item jdjz" id="cart">
+        <img class="no-active-icon" src="__STATIC__/bee/img/nav3.png" alt="" srcset="">
+        <img class="active-icon" src="__STATIC__/bee/img/nav3_active.png" alt="" srcset="">
+        <p>购物车</p>
+    </div>
+
+    <div class="item jdjz active" id='user'>
+        <img class="no-active-icon" src="__STATIC__/bee/img/nav4.png" alt="" srcset="">
+        <img class="active-icon" src="__STATIC__/bee/img/nav4_active.png" alt="" srcset="">
+        <p>我的</p>
+    </div>
+</div>
+
+<script>
+    $('#home').click(function(){
+        location.href = "{:url('Index/index')}";
+    });
+    $('#cart').click(function(){
+        location.href = "{:url('Mall/cart')}";
+    });
+    $('#user').click(function(){
+        location.href = "{:url('Userinfo/index')}";
+    });
+</script>

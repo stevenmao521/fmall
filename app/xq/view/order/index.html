@@ -1,0 +1,243 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href='{:url("index")}'>{:lang('list')}</a></li>
+            <li><a href='{:url("log")}'>{:lang('loglist')}</a></li>
+            <!--<li><a href='{:url("trash")}'>{:lang('trash')}</a></li>-->
+        </ul>
+    </div>
+    
+    <!-- 筛选列表 -->
+    <div class="demoTable layui-form">
+        <div class="layui-form-item" id="search_box" >
+            {$html_str}
+        </div>
+        <blockquote class="layui-elem-quote">
+            <!--
+            <button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="delAll">{:lang('delall')}</button>
+            <button type="button" class="layui-btn layui-btn-small layui-btn-primary" id="export">{:lang('export')}</button>
+            <a href="{:url('add')}" class="layui-btn layui-btn-small layui-bg-blue">{:lang('add')}</a>
+            -->
+            <button class="layui-btn layui-btn-small" id="search" data-type="reload" >{:lang('search')}</button>
+            <a href="{:url('index')}" class="layui-btn layui-btn-small" >{:lang('clear')}</a>
+        </blockquote>
+    </div>
+    {if condition='$count_html1'}
+        <table class="layui-table" lay-size="sm">
+            <thead>
+                <tr>
+                    <th width="50">合计项</th>
+                    {$count_html1}
+                </tr> 
+            </thead>
+            <tbody>
+                <td>合计</td>
+                {$count_html2}
+            </tbody>
+        </table>
+    {/if}
+    <!--列表-->
+    <table class="layui-table" id="list" lay-filter="list">
+    </table>
+</div>
+<!--action 操作-->
+<script type="text/html" id="action">
+    {if $olist}
+    <a class="layui-btn layui-btn-mini" lay-event="olist" >清单列表</a>
+    {/if}
+    <a href="{:url('orderdetail')}?id={{d.id}}" class="layui-btn layui-btn-warm layui-btn-mini">订单详情</a>
+    <!--<a href="{:url('edit')}?id={{d.id}}" class="layui-btn layui-btn-mini">编辑</a>-->
+    <!--<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">{:lang('del')}</a>-->
+    <a class="layui-btn layui-btn-blue layui-btn-mini" lay-event="dayin">打印订单</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="lose">标记失效</a>
+</script>
+
+<script type="text/html" id="haspay_evt">
+    {{# if(d.haspay==0){ }}
+    <span style="color:red;">未付款</span>
+    {{# }else if(d.haspay == 1){  }}
+    <span style="color:green;">已付款</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="status_evt">
+    {{# if(d.status==0){ }}
+    <span>未完成</span>
+    {{# }else if(d.status == 1){  }}
+    <span style="color:#00b4f8;">待发货</span>
+    {{# }else if(d.status == 2){  }}
+    <span style="color:#666;">已失效</span>
+    {{# }else if(d.status == 3){  }}
+    <span style="color:orange;">已发货</span>
+    {{# }else if(d.status == 4){  }}
+    <span style="color:green;">已完成</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="issend_evt">
+    {{# if(d.issend==1){ }}
+    
+    {{# if(d.status==2){ }}
+    <a class="layui-btn layui-btn-mini layui-btn-disabled" >已失效</a>
+    {{# }else{  }}
+    <a class="layui-btn layui-btn-mini layui-bg-blue" lay-event="issend">发货</a>
+    {{# } }}
+    
+    {{# }else{  }}
+    <!--<a class="layui-btn layui-btn-mini layui-btn-disabled" >已发货</a>-->
+    
+    
+    {{# if(d.status==4){ }}
+    <a class="layui-btn layui-btn-mini layui-btn-disabled" >已完成</a>
+    {{# }else{  }}
+    <a class="layui-btn layui-btn-mini layui-btn" lay-event="isfinish">确认收货</a>
+    {{# } }}
+    
+    
+    {{# } }}
+</script>
+
+<!--字段js模版-->
+{$js_tmp}
+
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element','layer'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var layer = layui.layer;
+        {$js_date}
+        var table = layui.table, $ = layui.jquery;
+        var tableIn = table.render({
+            id: 'user',
+            elem: '#list',
+            url: '{:url("index")}',
+            method: 'post',
+            page: true,
+            cols: [[
+                {checkbox:true,fixed: true},
+                //服务端赋值字段
+                {$js_str}
+                {field: 'issend', title: '订单发货', width: 100 , toolbar: '#issend_evt',fixed:'right'},
+                {width: 260, align: 'center', toolbar: '#action',fixed:'right'}
+            ]
+            ],
+            done: function(res, curr, count){
+                {$count_js}
+            },
+            limit: 15 //每页默认显示的数量
+            ,size: 'sm' //小尺寸的表格
+        });
+        
+        //搜索
+        $('#search').on('click', function() {
+            {$js_val}
+            tableIn.reload({
+                {$js_where}
+            });
+        });
+        
+        //导出
+        $('#export').on('click', function() {
+            {$js_val}
+            $.ajax({
+                url:'{:url("Export/index")}',
+                data:{{$js_ewhere},id:{$moduleid}},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    location.href = '{:url("Export/index")}&from=1';
+                },
+                error:function(data){
+                    location.href = '{:url("Export/index")}&from=1';
+                }
+            });
+        });
+        
+        //表格事件
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('您确定要删除该数据吗？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('listDel')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code===1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            tableIn.reload();
+                        }else{
+                            layer.msg('操作失败！',{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'issend') {
+                layer.confirm('您确定要发货吗？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('isSend')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code===1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            tableIn.reload();
+                        }else{
+                            layer.msg(res.msg,{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'lose') {
+                layer.confirm('您确定要使订单失效吗？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('isLose')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code===1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            tableIn.reload();
+                        }else{
+                            layer.msg(res.msg,{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'isfinish') {
+                layer.confirm('您确定要确认收货？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('isFinish')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code===1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            tableIn.reload();
+                        }else{
+                            layer.msg(res.msg,{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            } 
+        });
+
+        $('#delAll').click(function(){
+            layer.confirm('确认要删除选中信息吗？', {icon: 3}, function(index) {
+                layer.close(index);
+                var checkStatus = table.checkStatus('user'); //test即为参数id设定的值
+                var ids = [];
+                $(checkStatus.data).each(function (i, o) {
+                    ids.push(o.id);
+                });
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post("{:url('delall')}", {ids: ids}, function (data) {
+                    layer.close(loading);
+                    if (data.code === 1) {
+                        layer.msg(data.msg, {time: 1000, icon: 1});
+                        tableIn.reload();
+                    } else {
+                        layer.msg(data.msg, {time: 1000, icon: 2});
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>

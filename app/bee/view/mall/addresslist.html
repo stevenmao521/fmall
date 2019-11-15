@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+{include file="common/head"/}
+</head>
+
+<body class="bg-gray ">
+    <div class="wrapper">
+        <div class="address-list">
+            
+            {volist name="list" id="item"}
+            <div class="address">
+                <div class="address-head">
+                    <p class="title">{$item.uname}</p>
+                    
+                </div>
+                <div class="address-body">
+                    <ul class="clearfix">
+                        <li>
+                            <div class="left">手机号码：</div>
+                            <div class="right">{$item.mobile}</div>
+                        </li>
+                        <li>
+                            <div class="left">收货地址：</div>
+                            <div class="right">{$item.pro_city_reg} {$item.detail}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="address-foot clearfix">
+                    <a class="btn" href="javascript:;" onclick="choose({$item.id});"><img class="icon" src="__STATIC__/bee/img/img26.png" />选择</a>
+                </div>
+                <input class="list-item" placeholder="请输入详细地址" id="oid" value="{$id}" type="hidden" />
+            </div>
+            {/volist}
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    function choose(id) {
+        var oid = $('#oid').val();
+        $.ajax({
+            url:"{:url('Mall/chooseaddr')}",
+            type:'post',
+            dataType:'json',
+            data:{id:id,oid:oid},
+            success:function(data){
+                if (data.code == 1) {
+                    location.href = "{:url('Mall/orderdetail')}";
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+</script>

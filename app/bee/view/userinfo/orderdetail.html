@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>订单详细</title>
+        <link href="__STATIC__/bee/css/main.css?v1" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/index.css?v1" rel="stylesheet" />
+	<link href="__STATIC__/bee/css/zl.css?v1" rel="stylesheet" />
+	<link href="__STATIC__/bee/css/order.css" rel="stylesheet" />
+        <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+        <script src="__STATIC__/bee/js/tool/swiper-4.4.1.min.js"></script>
+        <script src="__STATIC__/bee/js/main.js"></script>
+    </head>
+
+    <body>
+        <div class="box">
+            <div class="tit fle-space f45">
+                <p class="fle-center"><span class="icon"></span>商品内容</p>
+                <p class="yel-color">{$order_info['status']}</p>
+            </div>
+            <div class="f4 cont">
+                <div>
+                    <span class="c9">下单时间：</span>
+                    <span class="c6">{$order_info['createtime']}</span>
+                </div>
+                <div class="mar1">
+                    <span class="c9">订单编号：</span>
+                    <span class="c6">{$order_info['orderid']}</span>
+                </div>
+                <div class="mar1">
+                    <span class="c9">订单金额：</span>
+                    <span class="yel-color">￥{$order_info['total_price']}</span>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="tit fle-space f45">
+                <p class="fle-center"><span class="icon"></span>收货信息</p>
+            </div>
+            <div class="f4 cont">
+                <div>
+                    <span class="c9">姓名：</span>
+                    <span class="c6">{$order_info['addrname']}</span>
+                </div>
+                <div class="mar1">
+                    <span class="c9">电话：</span>
+                    <span class="c6">{$order_info['addrmobile']}</span>
+                </div>
+                <div class="mar1">
+                    <span class="c9">地址：</span>
+                    <span class="c6">{$order_info['addrdetail']}</span>
+                </div>
+                
+                {if condition="$status eq 3"}
+                <div class="mar1">
+                    <span class="yel-color">{$order_info['express']}</span>
+                    <span class="yel-color">{$order_info['expresscode']}</span>
+                </div>
+                {/if}
+                
+            </div>
+        </div>
+        <div class="box">
+            <div class="tit fle-space f45">
+                <p class="fle-center"><span class="icon"></span>商品信息</p>
+            </div>
+            {volist name='order_detail' id='item'}
+            <div class="cont f4 fle course">
+                <img src="__PUBLIC__{$item.pic}" />
+                <div>
+                    <p>{$item.product_name}</p><br />
+                    <p class="mar1 c6"><span class="c9">数量：</span>{$item.nums}</p>
+                    <p class="mar1 c6"><span class="c9">总价：</span>￥{$item.total_price}</p>
+                </div>
+            </div>
+            {/volist}
+        </div>
+        <div class="box">
+            <div class="tit fle-space f45">
+                <p class="fle-center"><span class="icon"></span>温馨提示</p>
+            </div>
+            <div class="f4 c6 fle-center cont">如在订单配送过程中有任何疑问，请与客服联系。</div>
+        </div>
+        
+        {if condition="$status eq 3"}
+        <div class="page-foot-btn-box ">
+            <div class="page-foot-btn dianbo">
+                <p class="price"><span class="adorn">{$left_time}后自动收获</span></p>
+                <a class="buy" href="cart_buy.html">确认收货</a>
+            </div>
+        </div>
+        {/if}
+        
+        
+        {if condition="$order_info.issend eq 2 and $status neq 4"}
+        
+        <div class="page-foot-btn-box ">
+            <div class="page-foot-btn dianbo">
+                <p class="price"><span class="adorn">{$left_time}后自动收获</span></p>
+                <a class="buy" href="javascript:;" onclick="finish_order({$order_info.id});">确认收货</a>
+            </div>
+        </div>
+        
+        {/if}
+        
+    </body>
+    
+    
+    
+    <script src="__STATIC__/bee/js/jquery.min.js"></script>
+    <script src="__STATIC__/bee/js/circleChart.min.js"></script>
+</html>
+
+<script>
+    //确认收货
+    function finish_order(id) {
+        $.ajax({
+            url:"{:url('System/done')}",
+            type:'post',
+            dataType:'json',
+            data:{id:id},
+            success:function(data){
+                if (data.code == 1) {
+                    alert(data.msg);
+                    location.href="{:url('userinfo/myorder')}";
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+    
+    //测试
+    function finish_order_test(id) {
+        $.ajax({
+            url:"{:url('System/donetest')}",
+            type:'post',
+            dataType:'json',
+            data:{id:id},
+            success:function(data){
+                if (data.code == 1) {
+                    alert(data.msg);
+                    
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+    
+    //清空测试
+    function test() {
+        $.ajax({
+            url:"{:url('System/test')}",
+            type:'post',
+            dataType:'json',
+            success:function(data){
+                if (data.code == 1) {
+                    alert(data.msg);
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+</script>

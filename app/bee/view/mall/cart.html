@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+    {include file="common/head"/}
+    <style>
+        .left-icon {
+            margin-left: 3vw;
+            width: 9vw;
+            height: 9vw;
+        }
+        .left-icon img {
+            width: 100%;
+            height: 100%;
+        }
+        .left-icon canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .fle {
+            display: flex;
+            width:2rem;
+        }
+        .fle img{ width:.6rem;}
+        .fle-ali {
+            align-items: center;
+        }
+        .num {
+            display: inline-block;
+            width: 0.6rem;
+            text-align: center;
+        }
+        .jiage{ margin:0px;}
+    </style>
+</head>
+
+<body class="">
+
+    <section class="category-wrap">
+        
+        {volist name="cartlist" id="item"}
+        <div class="cart_fugou">
+            <li class="fl buy_xz" data="{$item.id}" onClick="choose(this);"><img src="__STATIC__/bee/img/buy_icon01.png" /></li>
+            <li class="img"><img src="__PUBLIC__{$item.pic}" /></li>
+            <li class="title text1">{$item.product_name}</li>
+            <li class="jiage fl">¥ <span id="total_price_{$item.id}">{$item.total_price}</span></li>
+            <li class="shuliang fr">
+                <p class="fle fle-ali">
+                    <img src="__STATIC__/bee/img/jian.jpg" onClick="plus_num({$item.id});"/>
+                    <span class="num" id="nums_{$item.id}">{$item.nums}</span>
+                    <img src="__STATIC__/bee/img/jia.jpg"  onclick="add_num({$item.id});"/>
+                </p>
+            </li>
+        </div>
+        <input type="hidden" id="price_{$item.id}" value="{$item.price}">
+        <div class="tips_h25"></div>
+        {/volist}
+    </section>
+
+    <div class="page-foot-btn-box ">
+        <div class="page-foot-btn dianbo">
+            <p class="price"><span class="adorn">￥</span><font id="total_price">0.00</font></p>
+            <p class="name">共<span class="num" id="total_nums">0</span>件商品</p>
+            <a class="buy" href="javascript:;" onClick="subOrder();">立即购买</a>
+        </div>
+    </div>
+    
+	<div style="height:1.45rem"></div>
+    {include file="common/footcart"/}
+</body>
+<script src="__STATIC__/bee/js/jquery.min.js"></script>
+<script src="__STATIC__/bee/js/circleChart.min.js"></script>
+<script>
+    function choose(obj) {
+        var img = $(obj).find("img").attr("src");
+        if (img == '/public/static/bee/img/buy_icon01.png') {
+            $(obj).find("img").attr("src","/public/static/bee/img/buy_icon02.png");
+        } else {
+            $(obj).find("img").attr("src","/public/static/bee/img/buy_icon01.png");
+        }
+        getall();
+    }
+    
+    //加数量
+    function add_num(id) {
+        var num = $('#nums_'+id).html();
+        var add_num = parseInt(num) + 1;
+        $('#nums_'+id).html(add_num);
+        
+        var total_price = parseInt(add_num) * parseInt($('#price_'+id).val());
+        $('#total_price_'+id).html(total_price);
+        getall();
+    }
+    
+    //减数量
+    function plus_num(id) {
+        var num = $('#nums_'+id).html();
+        var add_num = parseInt(num) - 1;
+        if (parseInt(add_num) > 0) {
+            $('#nums_'+id).html(add_num);
+            var total_price = parseInt(add_num) * parseInt($('#price_'+id).val());
+            $('#total_price_'+id).html(total_price);
+        }
+        getall();
+    }
+    
+    //计算总价总量
+    function getall() {
+        $(".buy_xz").each(function(){
+            var id = $(this).attr("data");
+            var total_nums = 0;
+            var total_price = 0;
+            if ($(this).find("img").attr("src") == "/public/static/bee/img/buy_icon02.png") {
+                total_price += parseInt($('#total_price_'+id).html());
+                total_nums += parseInt($('#nums_'+id).html());
+            }
+            $('#total_price').html(total_price);
+            $('#total_nums').html(total_nums);
+        });
+    }
+    
+    //提交购物车
+    function subOrder() {
+        var total_price = $('#total_price').html();
+        var total_nums = $('#total_nums').html();
+        
+        if (parseInt(total_nums) == 0) {
+            alert("请选择购买商品");
+            return false;
+        }
+        
+        var str = "";
+        $(".buy_xz").each(function(){
+            var id = $(this).attr("data");
+            if ($(this).find("img").attr("src") == "/public/static/bee/img/buy_icon02.png") {
+                nums = parseInt($('#nums_'+id).html());
+                str += id + "_" + nums + ',';
+            }
+        });
+        
+        $.ajax({
+            url:"{:url('Mall/addorder')}",
+            type:'post',
+            dataType:'json',
+            data:{data:str},
+            success:function(data){
+                if (data.code == 1) {
+                    //跳转订单详情页
+                    location.href = "{:url('Mall/orderdetail')}";
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+</script>
+<script>
+    let size = $(".left-icon").width()
+    $(".left-icon").circleChart({
+        size: size,
+        value: 50,
+        color: "#209e85",
+    });
+    $('.zhuanti-list .chufa').on('click', function () {
+        $(this).parents('.item').toggleClass('open');
+        // $(this).parents('.item-h').siblings('.item-b').slideToggle();
+    })
+    $('.bottom-tab-wrap .item').on('click', function () {
+        if ($(this).hasClass('active'))
+            return false;
+        $(this).addClass('active').siblings().removeClass('active')
+    })
+</script>
+<script>
+    var swiper = new Swiper('#head-swiper', {
+        pagination: {
+            el: '#head-swiper-pagination',
+            clickable: true,
+        },
+    });
+    var swiper = new Swiper('.live-swiper', {
+        slidesPerView: 'auto',
+    });
+    new Swiper('#nav-swiper', {
+        slidesPerView: 4.6,
+        spaceBetween: 0,
+    });
+</script>
+</html>

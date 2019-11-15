@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>{$title}</title>
+    <link href="__STATIC__/bee/css/zl.css?v1" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/main.css?v1" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/index.css?v1" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/user.css?v1" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/tool/swiper-4.4.1.min.css" rel="stylesheet" />
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="__STATIC__/bee/js/tool/swiper-4.4.1.min.js"></script>
+    <script src="__STATIC__/bee/js/main.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="infor-box">
+            <div class="infor-head">
+                <a class="infor" href="{:url('Userinfo/info')}">
+                    <p>{$info.nickname}</p>
+                    <p class="gray">{$info.mobile}</p>
+                </a>
+                <a class="userheard" href="{:url('Userinfo/info')}">
+                    <img src="{$info.avatarurl}" />
+                </a>
+            </div>
+            <div class="group">
+                {if condition="$info.level gt 1"}
+                <a class="group-item" href="{:url('Userinfo/myteam')}">
+                    <div class="group-img">
+                        <img src="__STATIC__/bee/img/img17.png" />
+                    </div>
+                    <p>我的团队</p>
+                </a>
+                {/if}
+                <a class="group-item" href="{:url('Userinfo/mywallet')}">
+                    <div class="group-img">
+                        <img src="__STATIC__/bee/img/img18.png" />
+                    </div>
+                    <p>我的钱包</p>
+                </a>
+                <a class="group-item" href="{:url('Userinfo/myorder')}">
+                    <div class="group-img">
+                        <img src="__STATIC__/bee/img/img19.png" />
+                    </div>
+                    <p>我的订单</p>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="list-box">
+            <div class="list">
+                
+                {if condition="$info.level gt 1"}
+                <a href="{:url('Userinfo/myshare')}">
+                    <div class="box2 "><img class="icon" src="__STATIC__/bee/img/img25.png" />我的推广方式<img class="arrow_img" src="__STATIC__/bee/img/img37.png" /></div>
+                </a>
+                {/if}
+                
+                {if condition="$info.parent_id gt 0"}
+                <a href="{:url('Userinfo/myservice')}">
+                {else/}
+                <a href="javascript:alert('没有上级服务商');">
+                {/if}
+                    <div class="box2 "><img class="icon" src="__STATIC__/bee/img/img24.png" />我的服务商<img class="arrow_img" src="__STATIC__/bee/img/img37.png" /></div>
+                </a>
+                <a href="{:url('Userinfo/myaddress')}">
+                    <div class="box2 "><img class="icon" src="__STATIC__/bee/img/img20.png" />收货地址管理<img class="arrow_img" src="__STATIC__/bee/img/img37.png" /></div>
+                </a>
+                <a href="javacript:void(0);">
+                    <div class="box2 arrow"><img class="icon" src="__STATIC__/bee/img/img23.png" />在线客服<span class="fr">15823821716</span></div>
+                </a>
+                <a href="{:url('Userinfo/aboutus')}">
+                    <div class="box2 arrow"><img class="icon" src="__STATIC__/bee/img/img22.png" />关于我们<img class="arrow_img" src="__STATIC__/bee/img/img37.png" /></div>
+                </a>
+            </div>
+        </div>
+        
+        <div style="height:1.45rem"></div>
+        {include file="common/footucenter"/}
+        
+    </div>
+</body>
+
+</html>

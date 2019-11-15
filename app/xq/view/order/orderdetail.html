@@ -1,0 +1,276 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('order/index')}">订单列表</a></li>
+            <li class="layui-this"><a href="{:url('order/orderdetail')}?id={$id}">订单详情</a></li>
+        </ul>
+    </div>
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>商品图片</th>
+            <th>商品名称</th>
+            <th>加个</th>
+            <th>订购数量</th>
+            <th>是否参与返佣</th>
+            <!--
+            <th>总瓶数</th>
+            <th>限制类型</th>
+            -->
+        </tr>
+        {volist name='list.data' id='item'}
+        <tr>
+            <td>
+                <img src="__PUBLIC__/{$item.pic}" width="75" height="50"/>
+            </td>
+            <td>{$item['product_name']}</td>
+            <td>{$item.price}</td>
+            <td>{$item.nums}</td>
+            <td>
+                {if condition="$item.isrebate eq 1"}
+                不参与
+                {else/}
+                参与
+                {/if}
+            </td>
+            <!--
+            <td>{$item.bottles}</td>
+            <td>
+                {if condition="$item.isnew eq 1"}
+                限新用户
+                {else/}
+                限复购
+                {/if}
+            </td>
+            -->
+        </tr>
+        {/volist}
+    </table>
+    
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>订单信息</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>当前状态</td>
+            <td>
+                {$order.status}
+            </td>
+        </tr>
+        <tr>
+            <td>订单总金额</td>
+            <td>
+                {$order.total_price}
+            </td>
+        </tr>
+        <tr>
+            <td>订单编号</td>
+            <td>{$order.orderid}</td>
+        </tr>
+        <tr>
+            <td>下单用户</td>
+            <td>{$member.nickname}</td>
+        </tr>
+        <tr>
+            <td>下单时间</td>
+            <td>{$order.createdate}</td>
+        </tr>
+        <tr>
+            <td>支付时间</td>
+            <td>{$order.paydate}</td>
+        </tr>
+        <tr>
+            <td>发货时间</td>
+            <td>{$order.senddate}</td>
+        </tr>
+        <tr>
+            <td>确认收货时间</td>
+            <td>{$order.finishdate}</td>
+        </tr>
+    </table>
+    
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>物流信息</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>收件人</td>
+            <td>
+                <input type="text" name="addrname" id="addrname" value="{$order.addrname}" placeholder="" class="layui-input"/>
+            </td>
+        </tr>
+        <tr>
+            <td>电话</td>
+            <td>
+                <input type="text" name="addrname" id="addrmobile"  value="{$order.addrmobile}" placeholder="" class="layui-input"/>
+            </td>
+        </tr>
+        <tr>
+            <td>地址</td>
+            <td><input type="text" name="addrname" id="addrdetail" value="{$order.addrdetail}" placeholder="" class="layui-input"/></td>
+        </tr>
+        <tr>
+            <td>快递公司</td>
+            <td><input type="text" name="addrname" id="express" value="{$order.express}" placeholder="" class="layui-input"/></td>
+        </tr>
+        <tr>
+            <td>快递单号</td>
+            <td><input type="text" name="addrname" id="expresscode" value="{$order.expresscode}" placeholder="" class="layui-input"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="hidden" id="oid" value="{$id}" />
+                <button type="button" class="layui-btn" lay-submit="" id="edit_1">修改</button>
+            </td>
+        </tr>
+    </table>
+    
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>备注信息</th>
+            <th>
+                <textarea class="layui-textarea" name="remark" id="remark" value="{$order.remark}"/>{$order.remark}</textarea>
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="submit" id="edit_2">修改</button>
+            </td>
+        </tr>
+    </table>
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <td colspan="2">
+                <button type="button" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="submit" id="send">确认发货</button>
+                <button type="button" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="submit" id="lose">标记失效</button>
+                <button type="button" class="layui-btn layui-bg-blue" lay-submit="" lay-filter="submit" id="dayin">打印发货单</button>
+                <button type="button" class="layui-btn layui-btn" lay-submit="" lay-filter="submit" id="back">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element','layer'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var layer = layui.layer;
+        var table = layui.table, $ = layui.jquery;
+        
+        laydate.render({
+          elem: '#start',
+          type: 'month'
+        });
+        laydate.render({
+          elem: '#end',
+          type: 'month'
+        });
+        
+        //发放
+        $('#edit_1').on('click', function() {
+            var addrname = $('#addrname').val();
+            var addrmobile = $('#addrmobile').val();
+            var addrdetail = $('#addrdetail').val();
+            var express = $('#express').val();
+            var expresscode = $('#expresscode').val();
+            var id = $('#oid').val();
+        
+            $.ajax({
+                url:'{:url("Order/orderdetail")}',
+                data: {addrname:addrname,addrmobile:addrmobile,addrdetail:addrdetail,express:express,expresscode:expresscode,ispost:1,id:id},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    if (data.code == 0) {
+                        layer.msg(data.msg,{time:1000,icon:2});
+                    } else {
+                        layer.msg(data.msg,{time:1000,icon:1});
+                    }
+                },
+                error:function(data){
+                    
+                }
+            });
+        });
+        
+        $('#edit_2').on('click', function() {
+            var remark = $('#remark').val();
+            var id = $('#oid').val();
+        
+            $.ajax({
+                url:'{:url("Order/orderdetail")}',
+                data: {remark:remark,ispost2:1,id:id},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    if (data.code == 0) {
+                        layer.msg(data.msg,{time:1000,icon:2});
+                    } else {
+                        layer.msg(data.msg,{time:1000,icon:1});
+                    }
+                },
+                error:function(data){
+                }
+            });
+        });
+        
+        $('#send').on('click', function() {
+            var id = $('#oid').val();
+            layer.confirm('确定发货？', {icon: 3}, function(index) {
+               $.ajax({
+                    url:'{:url("Order/isSend")}',
+                    data: {id:id},
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        if (data.code == 0) {
+                            layer.msg(data.msg,{time:1000,icon:2});
+                        } else {
+                            layer.msg(data.msg,{time:1000,icon:1});
+                            location.reload();
+                        }
+                    },
+                    error:function(data){
+                    }
+                }); 
+            });
+            
+        });
+        
+        $('#lose').on('click', function() {
+            var id = $('#oid').val();
+            layer.confirm('确定让订单失效？', {icon: 3}, function(index) {
+                $.ajax({
+                    url:'{:url("Order/isLose")}',
+                    data: {id:id},
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        if (data.code == 0) {
+                            layer.msg(data.msg,{time:1000,icon:2});
+                        } else {
+                            layer.msg(data.msg,{time:1000,icon:1});
+                            location.reload();
+                        }
+                    },
+                    error:function(data){
+                    }
+                });
+            });
+        });
+        
+        $('#dayin').on('click', function() {
+            var id = $('#oid').val();
+            window.open("{:url('Order/dayin')}?id="+id, "_blank");
+        });
+        
+        $('#back').on('click', function() {
+            location.href = "{:url('Order/index')}";
+        });
+        
+    });
+</script>
+</body>
+</html>

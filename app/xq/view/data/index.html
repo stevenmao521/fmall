@@ -1,0 +1,28 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('data/index')}">数据统计</a></li>
+        </ul>
+    </div>
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>总用户</th>
+            <th>总销量</th>
+            <th>总订单量</th>
+            <th>返佣统计</th>
+        </tr>
+        <tr>
+            <td>{$info.memnums}</td>
+            <td>{$info.selnums}</td>
+            <td>{$info.ordernums}</td>
+            <td>{$info.rebate}</td>
+        </tr>
+    </table>
+</div>
+{include file="common/foot"/}
+<script>
+    
+</script>
+</body>
+</html>

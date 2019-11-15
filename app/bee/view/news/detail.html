@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    {include file="common/head"/}
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            .news{padding:.45rem; line-height:.6rem; color:#333;}
+            .title{
+                font-size:.5rem;
+                text-align:center;
+            }
+            .data{ text-align:center; color:#999999; font-size:.3rem; margin-bottom:.3rem;}
+            .content{ font-size:.35rem;}
+            .content p{ margin-bottom:.3rem;}
+        </style>
+    </head>
+
+    <body class="news">
+        <div class="content">
+            {$info.content}
+        </div>
+        {include file="common/foot"/}
+    </body>
+</html>

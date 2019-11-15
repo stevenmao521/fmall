@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+    {include file="common/head"/}
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="container">
+                <form class="account-form" id="form2" method="POST">
+                    <div class="account-form-group">
+                        <div class="headline">
+                            <p>绑定手机号</p>
+                        </div>
+                    </div>
+                    <div class="account-form-group">
+                        <input class="account-form-control form-input" id="phone" type="tel" maxlength="11" placeholder="请输入手机号">
+                        <div class="account-form-guide account-form-clear">
+                            <a href="#"><img class="icon" src="__STATIC__/bee/img/img13.png">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="account-form-group">
+                        <input type="text" maxlength="4" class="account-form-control form-input" id="pass-code" placeholder="请输入验证码">
+                        <div class="account-form-guide account-form-validate">
+                            <a class="validate-btn " href="javascript:void(0);" id="code-btn">获取验证码</a>
+                        </div>
+                    </div>
+                    <div class="account-form-group">
+                        <input class="account-form-control form-input" id="serviceid" type="" maxlength="" placeholder="请填写服务商号码" value="{$meminfo.parent_service}">
+                        <div class="account-form-guide account-form-clear">
+                            <a href="#"><img class="icon" src="__STATIC__/bee/img/img13.png">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="account-form-group button-row">
+                        <a class="account-btn off" href="javascript:void(0);" id="bindBtn" onClick="submitBtn()">绑定手机号码</a>
+                    </div>
+                    <div class="account-form-group  err-tips-box" >
+                        <div class="err-tips" id="errMsg" style="display:none;"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        
+        $('#code-btn').click(function(){
+            var phone = $('#phone').val();
+            var pattern = /^1[34578]\d{9}$/;
+            if (!pattern.test(phone)) {
+                errMsg("手机号码格式不正确");
+                return false;
+            } else {
+                //检测该手机号是否已绑定
+                $.ajax({
+                    url:"{:url('Smscode/send')}",
+                    type:'post',
+                    dataType:'json',
+                    data:{phone:phone,type:1},
+                    success:function(data){
+                        if (data.code == 1) {
+                            errMsg(data.msg);
+                            settime();
+                        } else {
+                            errMsg(data.msg);
+                        }
+                    }
+                });
+            }
+        });
+        
+        //倒计时
+        var countdown = 60;
+        function settime() {
+            if(countdown == 0) {
+                $('#code-btn').html("获取验证码");
+                countdown = 60;
+                return;
+            } else {
+                $('#code-btn').html("重新发送("+countdown+")");
+                countdown--;
+            }
+            setTimeout(function(){
+                settime();
+            },1000);
+        }
+        
+        //离开焦点
+        $('#pass-code').blur(function(){
+            var phone = $('#phone').val();
+            var code = $('#pass-code').val();
+            if (phone !="" && code != "") {
+                $('#bindBtn').removeClass("off").addClass("on");
+            }
+        });
+        
+        $("#pass-code").bind('input propertychange',function () {
+            var phone = $('#phone').val();
+            var code = $('#pass-code').val();
+            if (phone !="" && code != "") {
+                $('#bindBtn').removeClass("off").addClass("on");
+            }
+        });
+        
+        //提交
+        function submitBtn() {
+            var phone = $('#phone').val();
+            var code = $('#pass-code').val();
+            var serviceid = $('#serviceid').val();
+            if (phone == "") {
+                errMsg("手机号不能为空");
+                return false;
+            }
+            var pattern = /^1[34578]\d{9}$/;
+            if (!pattern.test(phone)) {
+                errMsg("手机号码格式不正确");
+                return false;
+            }
+            if (code == "") {
+                errMsg("验证码不能为空");
+                return false;
+            }
+            if (serviceid == "") {
+                errMsg("服务商号码不能为空");
+                return false;
+            }
+            $.ajax({
+                url:"{:url('Passport/bindPhone')}",
+                type:'post',
+                dataType:'json',
+                data:{phone:phone,code:code,ispost:1,serviceid:serviceid},
+                success:function(data){
+                    if (data.code == 1) {
+                        //绑定成功跳转个人中心
+                        errMsg(data.msg);
+                        location.href = "{:url('Userinfo/index')}";
+                    } else {
+                        errMsg(data.msg);
+                    }
+                }
+            });
+        }
+        
+        function errMsg(txt) {
+            $('#errMsg').html(txt);    
+            $('#errMsg').fadeIn();    
+            setTimeout(function() {    
+                $('#errMsg').fadeOut();    
+            }, 2000);
+        }
+         
+
+    </script>
+</body>
+
+</html>

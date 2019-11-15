@@ -1,0 +1,118 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><a href='{:url("index")}'>列表</a></li>
+            <li><a href='{:url("trash")}'>回收站</a></li>
+        </ul>
+    </div>
+    
+    <!-- 筛选列表 -->
+    <div class="demoTable layui-form">
+        <div class="layui-form-item">
+        {$html_str}
+        </div>
+        <blockquote class="layui-elem-quote">
+            <button class="layui-btn layui-btn-small" id="search" data-type="reload">搜索</button>
+            <a href="{:url('index')}" class="layui-btn layui-btn-small">清空</a>
+            <button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="delAll">批量删除</button>
+            <a href="{:url('add')}" class="layui-btn layui-btn-small layui-bg-blue" style="float:right;">{:lang('add')}</a>
+        </blockquote>
+    </div>
+    <!--列表-->
+    <table class="layui-table" id="list" lay-filter="list">
+    </table>
+</div>
+<!--action 操作-->
+<script type="text/html" id="action">
+    <a href="{:url('edit')}?id={{d.id}}" class="layui-btn layui-btn-mini">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+</script>
+<!--字段js模版-->
+{$js_tmp}
+
+<script type="text/html" id="status_evt">
+    {{# if(d.status==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="selyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="selyes"></a>
+    {{# } }}
+</script>
+
+
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        {$js_date}
+        var table = layui.table, $ = layui.jquery;
+        var tableIn = table.render({
+            id: 'user',
+            elem: '#list',
+            url: '{:url("index")}',
+            method: 'post',
+            page: true,
+            cols: [[
+                {checkbox:true,fixed: true},
+                //服务端赋值字段
+                {$js_str}
+                {width: 160, align: 'center', toolbar: '#action'}
+            ]],
+            limit: 10 //每页默认显示的数量
+        });
+        
+        //搜索
+        $('#search').on('click', function() {
+            {$js_val}
+            tableIn.reload({
+                {$js_where}
+            });
+        });
+        
+        //表格事件
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('您确定要删除该数据吗？', function(index){
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('listDel')}",{id:data.id},function(res){
+                        layer.close(loading);
+                        if(res.code===1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            tableIn.reload();
+                        }else{
+                            layer.msg('操作失败！',{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+        $('#delAll').click(function(){
+            layer.confirm('确认要删除选中信息吗？', {icon: 3}, function(index) {
+                layer.close(index);
+                var checkStatus = table.checkStatus('user'); //test即为参数id设定的值
+                var ids = [];
+                $(checkStatus.data).each(function (i, o) {
+                    ids.push(o.id);
+                });
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post("{:url('delall')}", {ids: ids}, function (data) {
+                    layer.close(loading);
+                    if (data.code === 1) {
+                        layer.msg(data.msg, {time: 1000, icon: 1});
+                        tableIn.reload();
+                    } else {
+                        layer.msg(data.msg, {time: 1000, icon: 2});
+                    }
+                });
+            });
+        })
+    });
+</script>
+
+
+</body>
+</html>

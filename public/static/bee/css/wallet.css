@@ -1,0 +1,393 @@
+.head-warp {
+	padding: .68rem .54rem;
+	background-color: white;
+}
+
+.gray-line {
+	height: .27rem;
+	background-color: #f1f1f1;
+}
+
+.money {
+	text-align: center;
+	font-size: 0;
+}
+
+.money .money-title,
+.money .money-num,
+.money .money-btn {
+	font-size: 0.43rem;
+	text-align: center;
+	margin-bottom: .3rem;
+}
+
+.money .money-title {
+	color: #999999;
+}
+
+.money .money-num {
+	font-size: 1.49rem;
+	color: #36404a;
+}
+
+
+.money .money-btn {
+	display: inline-block;
+	width: 2.97rem;
+	height: .81rem;
+	margin-bottom: .5rem;
+	text-align: center;
+	line-height: .81rem;
+	color: white;
+	background-color: #209e64;
+	border-radius: 2rem;
+}
+
+.money-tips-box {
+	display: flex;
+	justify-content: space-between;
+}
+
+.money-tips-box .tips-item {
+	width: 4.32rem;
+	height: 1.89rem;
+	padding-top: .4rem;
+	box-shadow: 0rem 0.01rem 0.54rem 0rem rgba(204, 204, 204, 0.4);
+	text-align: center;
+	font-size: 0.35rem;
+	color: #666666;
+	box-sizing: border-box;
+	border-radius: 5px;
+}
+
+.money-tips-box .tips-item .tips-num {
+	font-size: 0.62rem;
+	color: #209e64;
+	margin-bottom: .1rem;
+}
+
+.navbar {
+	border-bottom: 1px solid #e6e6e8;
+	box-sizing: border-box;
+}
+
+.navbar-nav {
+	display: flex;
+}
+
+.navbar-nav>li {
+	flex: 1;
+}
+
+.navbar-nav>li>a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	height: 1.9rem;
+	font-size: .46rem;
+}
+
+.navbar-nav>li.active>a {
+	color: #209e64;
+}
+
+.navbar-nav>li.active>a:after {
+	content: "";
+	position: absolute;
+	bottom: -1px;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	width: 1.8rem;
+	height: 0.05rem;
+	background-color: #209e64;
+	border-radius: 1rem;
+}
+
+.money-history {
+	padding: 0 .53rem;
+	margin-bottom: .95rem;
+}
+
+.money-history li {
+	padding: .53rem 3rem .53rem 0;
+	position: relative;
+	border-bottom: 1px solid #e6e6e8;
+	font-size: 0;
+	box-sizing: border-box;
+}
+
+.money-history .history-title {
+	font-size: 0.41rem;
+	line-height: 0.61rem;
+	color: #333333;
+	margin-bottom: .1rem;
+}
+
+.money-history .history-time {
+	font-size: 0.32rem;
+	color: #9a9898;
+}
+
+.money-history .history-num {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 3rem;
+	height: 100%;
+	font-size: 0.51rem;
+	color: #209e64;
+}
+
+
+.money-history .history-num.reduce {
+	color: #ff9a5d;
+}
+
+
+.btn {
+	background-color: #209E64;
+}
+
+.content-warp {
+	padding: .54rem .55rem 0 .55rem;
+	box-sizing: border-box;
+}
+
+.gray-line {
+	height: .27rem;
+	background-color: #f1f1f1;
+}
+
+.buy-input {
+	padding-bottom: .45rem;
+	border-bottom: 1px solid #dddddd;
+	box-sizing: border-box;
+}
+
+.buy-input .input-tips {
+	margin-bottom: .5rem;
+	font-size: .41rem;
+	color: #36404a;
+}
+
+.buy-input .input-warp {
+	position: relative;
+	padding: 0 .6rem 0 .7rem;
+	width: 100%;
+	height: 1.35rem;
+	font-size: 1.35rem;
+	color: #36404a;
+	box-sizing: border-box;
+}
+
+.buy-input .input-warp .input-adorn {
+	position: absolute;
+	top: 0;
+	width: 1rem;
+	height: 100%;
+	left: -.3rem;
+	font-size: .9rem;
+	line-height: 1.6rem;
+}
+
+.buy-input .input-warp .input {
+	width: 90%;
+	vertical-align: top;
+	color: #36404a;
+	font-size: 1.35rem;
+	line-height: 1.35rem;
+}
+
+.buy-input .input-warp .icon {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	width: 0.41rem;
+	height: 0.41rem;
+	-webkit-transform: translateY(-50%);
+}
+
+.buy-type .type-title {
+	font-size: 0.54rem;
+	color: #36404a;
+	margin-bottom: .68rem;
+}
+
+.buy-type {
+	padding-top: .95rem;
+}
+
+.buy-type .type-select {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: .68rem;
+}
+
+.buy-type .type-select .select-btn {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 4.32rem;
+	height: 1.08rem;
+	border-radius: .07rem;
+	font-size: .41rem;
+	border: solid 1px #dddddd;
+}
+
+.buy-type .type-select .select-btn .icon {
+	display: block;
+	width: .68rem;
+	height: .68rem;
+	margin-right: .27rem;
+}
+
+.buy-type .type-select .select-btn .select-adorn {
+	position: absolute;
+	width: 0.68rem;
+	height: 0.59rem;
+	right: -1px;
+	bottom: -1px;
+	display: none;
+}
+
+.buy-type .type-select .select-btn.opt {
+	border-color: #209E64;
+}
+
+.buy-type .type-select .select-btn.opt .select-adorn {
+	display: block;
+}
+
+.buy-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 1.35rem;
+	margin-bottom: .68rem;
+	background-color: #209e64;
+	border-radius: 0.07rem;
+	font-size: 0.49rem;
+	color: #ffffff;
+}
+
+.buy-declare {
+	padding-top: .66rem;
+	margin-bottom: 1rem;
+}
+
+.buy-declare .declare-title {
+	font-size: 0.54rem;
+	color: #36404a;
+	margin-bottom: .65rem;
+}
+
+.buy-declare .declare-list .declare-text {
+	margin-bottom: .2rem;
+	line-height: .5rem;
+	font-size: 0.35rem;
+	color: #999999;
+}
+
+.goods-head {
+	padding-top: .68rem;
+	border-bottom: 1px solid #DDD;
+}
+
+.goods-head .goods-title {
+	margin-bottom: .7rem;
+	font-size: .54rem;
+}
+
+.goods-infor .goods-list {
+	margin-bottom: .68rem;
+}
+
+.goods-infor .goods-list li {
+	display: flex;
+	font-size: .41rem;
+	color: #36404a;
+	margin-bottom: .4rem;
+}
+
+.goods-infor .goods-list .goods-name {
+	flex: 1;
+}
+
+.goods-infor .goods-list .goods-num,
+.goods-infor .goods-list .goods-price {
+	display: inline-block;
+	width: 2rem;
+	height: 100%;
+	text-align: right;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.goods-infor .goods-list .goods-price .price-adorn {
+	font-size: .35rem;
+}
+
+.goods-check .check-list {
+	margin-bottom: .68rem;
+}
+
+.goods-check .check-list li {
+	display: flex;
+	margin-bottom: .2rem;
+}
+
+.goods-check .check-list li:nth-last-child(1) {
+	margin-bottom: 0;
+}
+
+.goods-check .check-list .check-name,
+.goods-check .check-list .check-price {
+	flex: 1;
+	font-size: .41rem;
+	color: #999999;
+}
+
+.goods-check .check-list .check-price {
+	text-align: right;
+	color: #36404a;
+}
+
+.goods-check .check-list .pay .check-name,
+.goods-check .check-list .pay .check-price {
+	color: #ff9a5d;
+}
+
+.goods-check .check-list .pay .check-name {
+	font-weight: bold;
+}
+
+.goods-address .address-title {
+	font-size: 0.54rem;
+	margin-bottom: .66rem;
+}
+
+.address-infor {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	padding-right: .5rem;
+	margin-bottom: .66rem;
+	box-sizing: border-box;
+}
+
+
+.address-infor .address-user {
+	font-size: 0.43rem;
+	color: #36404a;
+	margin-bottom: .1rem;
+}
+
+.address-infor .address-detail {
+	font-size: 0.35rem;
+	color: #999999;
+}

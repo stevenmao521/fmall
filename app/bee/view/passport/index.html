@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+    {include file="common/head"/}
+    <style>
+        .left-icon {
+            margin-left: 3vw;
+            width: 9vw;
+            height: 9vw;
+        }
+        .left-icon img {
+            width: 100%;
+            height: 100%;
+        }
+        .left-icon canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gray ">
+    <section class="head-wrap">
+        <div class="head-swiper">
+            <div class="swiper-container" id="head-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="__STATIC__/bee/img/ban01.jpg" /></div>
+                    <div class="swiper-slide"><img src="__STATIC__/bee/img/img05.jpg" /></div>
+                    <div class="swiper-slide"><img src="__STATIC__/bee/img/ban01.jpg" /></div>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination" id="head-swiper-pagination"></div>
+            </div>
+        </div>
+        <div class="home_ban">
+            <li><img src="__STATIC__/bee/img/home_pic01.jpg" /></li>
+            <li><img src="__STATIC__/bee/img/home_pic02.jpg" /></li>
+            <li><img src="__STATIC__/bee/img/home_pic03.jpg" /></li>
+            <li><img src="__STATIC__/bee/img/home_pic04.jpg" /></li>
+        </div>
+        <div class="h25"> </div>
+    </section>
+
+    <section class="category-wrap">
+        <div class="home_sg">
+            <p>首购有礼</p>
+            <span class="tips">* 仅限新会员购买 *</span>
+        </div>
+        <div class="home_sgsp">
+            <li><span class="pic_tips">限首购用户</span><img src="__STATIC__/bee/img/pic01.jpg" /></li>
+            <li class="title">云南原始森林野生地下土酸蜂蜜树酸蜂蜜老巢蜜纯正天然1000g药花蜜</li>
+            <li class="jiage">¥ <span>398.00</span><span class="fr tips">6213人已购买</span></li>
+        </div>
+    </section>
+
+    <section class="category-wrap">
+        <div class="home_sg">
+            <p>VIP复购</p>
+            <span class="tips">* 仅限VIP会员购买 *</span>
+        </div>
+        <div class="home_fugou">
+            <li class="img"><span class="pic_tips">限复购用户</span><img src="__STATIC__/bee/img/pic01.jpg" /></li>
+            <li class="title">云南原始森林野生地下土酸蜂蜜</li>
+            <li class="jiage">¥ <span>398.00</span></li>
+        </div>
+        <div class="tips_x"></div>
+
+        <div class="home_fugou">
+            <li class="img"><span class="pic_tips">直升经理</span><img src="__STATIC__/bee/img/pic01.jpg" /></li>
+            <li class="title">云南原始森林野生地下土酸蜂蜜树酸蜂蜜（9盒）</li>
+            <li class="jiage">¥ <span>2322.00</span></li>
+        </div>
+        <div class="tips_x"></div>
+
+        <div class="home_fugou">
+            <li class="img"><span class="pic_tips">直升总监</span><img src="__STATIC__/bee/img/pic01.jpg" /></li>
+            <li class="title">云南原始森林野生地下土酸蜂蜜树酸蜂蜜（27盒）</li>
+            <li class="jiage">¥ <span>6966.00</span></li>
+        </div>
+        <div class="tips_x"></div>
+    </section>
+
+    <div style="height:1.45rem"></div>
+    <div class="bottom-tab-wrap flex">
+        <div class="item jdjz active">
+            <img class="no-active-icon" src="__STATIC__/bee/img/nav2.png" alt="" srcset="">
+            <img class="active-icon" src="__STATIC__/bee/img/nav2_active.png" alt="" srcset="">
+            <p>蜂蜜商城</p>
+        </div>
+        <div class="item jdjz">
+            <img class="no-active-icon" src="__STATIC__/bee/img/nav3.png" alt="" srcset="">
+            <img class="active-icon" src="__STATIC__/bee/img/nav3_active.png" alt="" srcset="">
+            <p>购物车</p>
+        </div>
+
+        <div class="item jdjz ">
+            <img class="no-active-icon" src="__STATIC__/bee/img/nav4.png" alt="" srcset="">
+            <img class="active-icon" src="__STATIC__/bee/img/nav4_active.png" alt="" srcset="">
+            <p>我的</p>
+        </div>
+    </div>
+</body>
+<script src="__STATIC__/bee/js/jquery.min.js"></script>
+<script src="__STATIC__/bee/js/circleChart.min.js"></script>
+<script>
+    let size = $(".left-icon").width()
+    $(".left-icon").circleChart({
+        size: size,
+        value: 50,
+        color: "#209e85",
+    });
+    $('.zhuanti-list .chufa').on('click', function () {
+        $(this).parents('.item').toggleClass('open');
+        // $(this).parents('.item-h').siblings('.item-b').slideToggle();
+    })
+    $('.bottom-tab-wrap .item').on('click', function () {
+        if ($(this).hasClass('active'))
+            return false;
+        $(this).addClass('active').siblings().removeClass('active')
+    })
+</script>
+<script>
+    var swiper = new Swiper('#head-swiper', {
+        pagination: {
+            el: '#head-swiper-pagination',
+            clickable: true,
+        },
+    });
+    var swiper = new Swiper('.live-swiper', {
+        slidesPerView: 'auto',
+    });
+    new Swiper('#nav-swiper', {
+        slidesPerView: 4.6,
+        spaceBetween: 0,
+    });
+</script>
+</html>

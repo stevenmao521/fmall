@@ -1,0 +1,120 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('Members/index')}">用户列表</a></li>
+            <li class="layui-this"><a href="{:url('Members/infos')}?id={$id}">详情</a></li>
+            <li class=""><a href="{:url('Members/child')}?parentid={$id}">下级团队</a></li>
+        </ul>
+    </div>
+    
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>基本信息</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>所属服务商ID</td>
+            <td>
+                <input type="text" name="" id="serviceid" value="{$mem.parent_service}" placeholder="" class="layui-input"/>
+            </td>
+        </tr>
+        <tr>
+            <td>昵称</td>
+            <td>
+                <input type="text" name="" id="nickname" value="{$mem.nickname}" placeholder="" class="layui-input"/>
+            </td>
+        </tr>
+        <tr>
+            <td>手机号</td>
+            <td><input type="text" name="" id="mobile" value="{$mem.mobile}" placeholder="" class="layui-input"/></td>
+        </tr>
+        <tr>
+            <td>用户等级</td>
+            <td>{$mem.level}</td>
+        </tr>
+        <tr>
+            <td>账户余额</td>
+            <td>{$mem.balance}</td>
+        </tr>
+        <tr>
+            <td>总收益</td>
+            <td>{$mem.total_balance}</td>
+        </tr>
+        <tr>
+            <td>真实姓名</td>
+            <td><input type="text" name="" id="realname" value="{$mem.realname}" placeholder="" class="layui-input"/></td>
+        </tr>
+        <tr>
+            <td>银行卡号</td>
+            <td><input type="text" name="" id="bankcode" value="{$mem.bankcode}" placeholder="" class="layui-input"/></td>
+        </tr>
+        <tr>
+            <td>开户行</td>
+            <td><input type="text" name="" id="bankname" value="{$mem.bankname}" placeholder="" class="layui-input"/></td>
+        </tr>
+    </table>
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <td colspan="2">
+                <input type="hidden" id="oid" value="{$id}">
+                <button type="button" class="layui-btn layui-btn-primary" lay-submit="" lay-filter="submit" id="edit">修改</button>
+                <button type="button" class="layui-btn layui-btn" lay-submit="" lay-filter="submit" id="back">返回</button>
+            </td>
+        </tr>
+    </table>
+</div>
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element','layer'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var layer = layui.layer;
+        var table = layui.table, $ = layui.jquery;
+        
+        laydate.render({
+          elem: '#start',
+          type: 'month'
+        });
+        laydate.render({
+          elem: '#end',
+          type: 'month'
+        });
+        
+        //发放
+        $('#edit').on('click', function() {
+            var serviceid = $('#serviceid').val();
+            var nickname = $('#nickname').val();
+            var mobile = $('#mobile').val();
+            var realname = $('#realname').val();
+            var bankcode = $('#bankcode').val();
+            var bankname = $('#bankname').val();
+            var id = $('#oid').val();
+        
+            $.ajax({
+                url:'{:url("Members/infos")}',
+                data: {serviceid:serviceid,nickname:nickname,mobile:mobile,realname:realname,bankcode:bankcode,bankname:bankname,ispost:1,id:id},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    if (data.code == 0) {
+                        layer.msg(data.msg,{time:1000,icon:2});
+                    } else {
+                        layer.msg(data.msg,{time:1000,icon:1});
+                    }
+                },
+                error:function(data){
+                    
+                }
+            });
+        });
+        
+        
+        $('#back').on('click', function() {
+            location.href = "{:url('Members/index')}";
+        });
+        
+    });
+</script>
+</body>
+</html>

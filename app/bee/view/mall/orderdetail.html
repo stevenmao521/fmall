@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    {include file="common/head"/}
+    <style>
+        .left-icon {
+            margin-left: 3vw;
+            width: 9vw;
+            height: 9vw;
+        }
+        .left-icon img {
+            width: 100%;
+            height: 100%;
+        }
+        .left-icon canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body class="">
+
+    <section class="category-wrap">
+        <div class="cart_fugou">
+            <li class="img"><img src="__PUBLIC__{$product_detail.pic}" /></li>
+            <li class="title text1">{$product_detail.product_name}</li>
+            <li class="jiage">¥ <span>{$product_detail.price}</span></li>
+        </div>
+        <div class="tips_h25"></div>
+        <div class="content-warp">
+            
+            
+            <div class="goods-address">
+                {if condition="$addressinfo"}
+                    <a class="address-infor arrow" href="{:url('Mall/addresslist')}?id={$order.id}">
+                {else/}
+                    <a class="address-infor arrow" href="{:url('Mall/addressadd')}?id={$order.id}">
+                {/if}
+                
+                <h1 class="address-title">收货地址</h1>
+                <h3 class="address-user"><span class="name">{$order.addrname}</span> <span class="tel">{$order.addrmobile}</span></h3>
+                <p class="address-detail">{$order.addrdetail}</p>
+                <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                </a>
+            </div>
+           
+        </div>
+        <div class="tips_h25"></div>
+
+        <div class="content-warp">
+            <div class="buy-declare">
+                <h1 class="declare-title">说明</h1>
+                <div class="declare-list">
+                    <p class="declare-text">1. 购买商品会优先使用账户的余额或代金券支付；</p>
+                    <p class="declare-text">2. 当余额/代金券不足时可选择在线支付或去我的钱包充值；</p>
+                    <p class="declare-text">3. 充值的余额不会过期、不能提现或转账。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-warp">
+            {if condition='$needpid eq 1'}
+            <div class="container">
+                <div class="account-form">
+                    <div class="account-form-group">
+                        <input type="text" class="account-form-control " placeholder="请输入服务商id" id="serviceid">
+                    </div>
+                </div>
+                
+            </div>
+            {else/}
+                <input type="hidden"  class="account-form-control " placeholder="" id="serviceid" value="{$serviceid}" />
+            {/if}
+        </div>
+    </section>
+
+    <div class="page-foot-btn-box ">
+        <div class="page-foot-btn dianbo">
+            <p class="price"><span class="adorn">￥</span>{$order.total_price}</p>
+            <p class="name">共<span class="num">{$order.total_nums}</span>件商品</p>
+            <!--<a class="buy" href="javascript:;" onclick="pay_order({$order.id});">立即购买</a>-->
+            <a class="buy" href="javascript:;" onClick="pay_orderwx({$order.id});">立即购买</a>
+        </div>
+    </div>
+    <div style="height:1.45rem"></div>
+    {include file="common/footcart"/}
+</body>
+<script src="__STATIC__/bee/js/jquery.min.js"></script>
+<script src="__STATIC__/bee/js/circleChart.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script>
+    $(document).ready(function(){ 
+        var jsurl = "http://fmall.yuntim.cn/bee/Mall/orderdetail";
+        $.ajax({
+            url:"{:url('Sign/getSignApi')}",
+            type:'post',
+            dataType:'json',
+            success:function(data){
+                if (data.code == 1) {
+                    //扫描设备二维码
+                    wx.config({
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: data.data.appId, // 必填，公众号的唯一标识
+                        timestamp: data.data.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
+                        signature: data.data.signature,// 必填，签名
+                        jsApiList: [
+                           // 所有要调用的 API 都要加到这个列表中
+                           'chooseWXPay',
+                        ] // 必填，需要使用的JS接口列表
+                    });
+                    wx.error(function (res) {
+                        alert("调用微信jsapi返回的状态:" + res.errMsg);
+                    });
+                } else {
+                    
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    let size = $(".left-icon").width()
+    $(".left-icon").circleChart({
+        size: size,
+        value: 50,
+        color: "#209e85",
+    });
+    $('.zhuanti-list .chufa').on('click', function () {
+        $(this).parents('.item').toggleClass('open');
+        // $(this).parents('.item-h').siblings('.item-b').slideToggle();
+    })
+    $('.bottom-tab-wrap .item').on('click', function () {
+        if ($(this).hasClass('active'))
+            return false;
+        $(this).addClass('active').siblings().removeClass('active')
+    })
+</script>
+<script>
+    var swiper = new Swiper('#head-swiper', {
+        pagination: {
+            el: '#head-swiper-pagination',
+            clickable: true,
+        },
+    });
+    var swiper = new Swiper('.live-swiper', {
+        slidesPerView: 'auto',
+    });
+    new Swiper('#nav-swiper', {
+        slidesPerView: 4.6,
+        spaceBetween: 0,
+    });
+    
+    //支付订单
+    function pay_order(id) {
+        $.ajax({
+            url:"{:url('Mall/orderpay')}",
+            //url:"{:url('Mall/orderpaywx')}",
+            type:'post',
+            dataType:'json',
+            data:{id:id},
+            success:function(data){
+                if (data.code == 1) {
+                    //跳转订单详情页
+                    location.href = "{:url('Index/index')}";
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+    
+    //微信支付
+    function pay_orderwx(id) {
+        var serviceid = $('#serviceid').val();
+        
+        $.ajax({
+            url:"{:url('Mall/orderpaywx')}",
+            type:'post',
+            dataType:'json',
+            data:{id:id,serviceid:serviceid},
+            success:function(data){
+                console.log(data);
+                if (data.code == 1) {
+                    //跳转订单详情页
+                    wx.chooseWXPay({
+                        timestamp: data.data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        nonceStr: data.data.nonceStr, // 支付签名随机串，不长于 32 位
+                        package: data.data.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                        signType: data.data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        paySign: data.data.paySign, // 支付签名
+                        success: function (res) {
+                            // 支付成功后的回调函数
+                            location.href = "{:url('Userinfo/myorder')}";
+                        }
+                    });
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+    
+</script>
+</html>

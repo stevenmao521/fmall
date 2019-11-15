@@ -1,0 +1,60 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li><a href='{:url("index")}&mod={$model}&pid={$pid}'>列表</a></li>
+            <li class="layui-this"><a href='{:url("log")}&mod={$model}&pid={$pid}'>维护明细</a></li>
+            <li><a href='{:url("trash")}&mod={$model}&pid={$pid}'>回收站</a></li>
+        </ul>
+    </div>
+    
+    <!-- 筛选列表 -->
+    <div class="demoTable layui-form">
+        <div class="layui-form-item">
+        {$html_str}
+        </div>
+        <blockquote class="layui-elem-quote">
+            <button class="layui-btn layui-btn-small" id="search" data-type="reload">搜索</button>
+            <a href="{:url('log')}&mod={$model}&pid={$pid}" class="layui-btn layui-btn-small">清空</a>
+        </blockquote>
+    </div>
+    <!--列表-->
+    <table class="layui-table" id="list" lay-filter="list">
+    </table>
+</div>
+<!--字段js模版-->
+{$js_tmp}
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        {$js_date}
+        var table = layui.table, $ = layui.jquery;
+        var tableIn = table.render({
+            id: 'user',
+            elem: '#list',
+            url: '{:url("log")}&mod={$model}&pid={$pid}',
+            method: 'post',
+            page: true,
+            cols: [[
+                {checkbox:true,fixed: true},
+                //服务端赋值字段
+                {$js_str}
+            ]],
+            limit: 10 //每页默认显示的数量
+        });
+        
+        //搜索
+        $('#search').on('click', function() {
+            {$js_val}
+            tableIn.reload({
+                {$js_where}
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

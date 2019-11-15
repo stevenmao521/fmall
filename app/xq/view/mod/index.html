@@ -1,0 +1,119 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <!--列表-->
+    <table class="layui-table" id="list" lay-filter="list">
+    </table>
+</div>
+<!--字段js模版-->
+<script type="text/html" id="isList">
+    {{# if(d.islist==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="listyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="listyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isSel">
+    {{# if(d.issel==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="selyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="selyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isSort">
+    {{# if(d.issort==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="sortyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="sortyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isCount">
+    {{# if(d.iscount==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="countyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="countyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="order">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input order" value=" {{d.listorder}}" size="10"/>
+</script>
+<script type="text/html" id="width">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input width" value="{{d.width}}" size="10"/>
+</script>
+
+{include file="common/foot"/}
+<script>
+    layui.use('table', function() {
+        var table = layui.table, $ = layui.jquery;
+        var tableIn=table.render({
+            elem: '#list',
+            url: '{:url("index")}',
+            where: { //设定异步数据接口的参数
+                id: '{:input("id")}'
+            },
+            method: 'post',
+            cols: [[
+                {field: 'name', title: '别名', width: 193},
+                {field: 'islist', align: 'center', title: '列表', width: 88, toolbar: '#isList'},
+                {field: 'issel', align: 'center', title: '筛选', width: 88, toolbar: '#isSel'},
+                {field: 'issort', align: 'center', title: '排序', width: 88, toolbar: '#isSort'},
+                {field: 'iscount', align: 'center', title: '统计', width: 88, toolbar: '#isCount'},
+                {field: 'width', align: 'center', title: '列表宽', width: 100, templet: '#width'},
+                {field: 'listorder', align: 'center', title: '{:lang("order")}', width: 100, sort: true,templet: '#order'}
+            ]]
+        });
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if(obj.event === 'listyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("oa/Mod/listStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('index')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'selyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("oa/Mod/selStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('index')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'sortyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("oa/Mod/sortStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('index')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'countyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("oa/Mod/countStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('index')}?id={:input('id')}"
+                });
+            }
+        });
+        $('body').on('blur','.order',function() {
+            var id = $(this).attr('data-id');
+            var listorder = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("oa/Mod/listOrder")}',{id:id,listorder:listorder,moduleid:"{:input('id')}"},function(res){
+                layer.close(loading);
+                if(res.code===1){
+                    layer.msg(res.msg,{time:1000,icon:1});
+                    tableIn.reload();
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            });
+        });
+        $('body').on('blur','.width',function() {
+            var id = $(this).attr('data-id');
+            var width = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("oa/Mod/editWidth")}',{id:id,width:width,moduleid:"{:input('id')}"},function(res){
+                layer.close(loading);
+                if(res.code===1){
+                    layer.msg(res.msg,{time:1000,icon:1});
+                    tableIn.reload();
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>{$title}</title>
+        <link href="__STATIC__/bee/css/zl.css?v1" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/main.css?v2" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/wallet.css?1" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/user.css?1" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/elegant-icons.css" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/tool/swiper-4.4.1.min.css" rel="stylesheet" />
+        <link href="__STATIC__/bee/css/tool/tab.css" rel="stylesheet" />
+        <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+        <script src="__STATIC__/bee/js/tool/swiper-4.4.1.min.js"></script>
+        <script src="__STATIC__/bee/js/main.js"></script>
+        <script src="__STATIC__/bee/js/tool/tab.js"></script>
+    </head>
+
+    <body>
+        <div class="infor-head">
+            <a class="infor" href="javascript:;">
+                <p>{$info.nickname}</p>
+                <p class="gray">{$info.level_name} - {$info.serviceid}</p>
+                <p class="gray">已累计销售：{$all}瓶</p>
+            </a>
+            <a class="userheard" href="userinfor.html">
+                <img src="{$info.avatarurl}" />
+            </a>
+        </div>
+        <div class="wrapper">
+
+            <div class="gray-line"></div>
+            <div class="conten-warp">
+                <div class="navbar ">
+                    <ul class="navbar-nav" id="tabs-nav">
+                        <li class="active">
+                            <a href="#">下级粉丝</a>
+                        </li>
+                        <li>
+                            <a href="#">下级销售</a>
+                        </li>
+                        <li>
+                            <a href="#">下级经理</a>
+                        </li>
+                        <li>
+                            <a href="#">下级总监</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar-content" id="tabs-content">
+                    <div class="panel active">
+                        <ul class="money-history">
+                            {volist name="level1" id="item"}
+                            <li>
+                                <p class="history-title">{$item.nickname}</p>
+                                <p class="history-time">{$item.mobile}</p>
+                                <div class="fensi history-num "><img src="{$item.avatarurl}" /></div>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                    <div class="panel ">
+                        <ul class="money-history">
+                            {volist name="level2" id="item"}
+                            <li>
+                                <p class="history-title">{$item.nickname}</p>
+                                <p class="history-time">{$item.mobile}</p>
+                                <div class="fensi history-num "><img src="{$item.avatarurl}" /></div>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                    <div class="panel ">
+                        <ul class="money-history">
+                            {volist name="level3" id="item"}
+                            <li>
+                                <p class="history-title">{$item.nickname}</p>
+                                <p class="history-time">{$item.mobile}</p>
+                                <div class="fensi history-num "><img src="{$item.avatarurl}" /></div>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                    <div class="panel ">
+                        <ul class="money-history">
+                            {volist name="level4" id="item"}
+                            <li>
+                                <p class="history-title">{$item.nickname}</p>
+                                <p class="history-time">{$item.mobile}</p>
+                                <div class="fensi history-num "><img src="{$item.avatarurl}" /></div>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height:1.45rem"></div>
+        {include file="common/footucenter"/}
+    </body>
+</html>

@@ -1,0 +1,152 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('memberyear/index')}">分销年终奖</a></li>
+            <li class="layui-this"><a href="{:url('memberyear/orderlist')}">年终奖发放单</a></li>
+        </ul>
+    </div>
+    
+    <table class="layui-table" id="list" lay-filter="list">
+        <tr>
+            <th>名称</th>
+            <th>开始日期</th>
+            <th>结束日期</th>
+            <th>达标人数</th>
+            <th>总推销瓶数</th>
+            <th>发放总金额</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        {volist name='list' id='item'}
+        <tr>
+            <td>{$item.name}</td>
+            <td>{$item.start}</td>
+            <td>{$item.end}</td>
+            <td>{$item.allperson}</td>
+            <td>{$item.allnums}</td>
+            <td>{$item.allreward}</td>
+            <td>
+                {if condition="$item.status eq 0"}
+                未发放
+                {else/}
+                已发放
+                {/if}
+            </td>
+            <td>
+                {if condition="$item.status eq 0"}
+                <a  data="{$item.id}" class="layui-btn layui-btn-mini reward">发放</a>
+                {/if}
+            </td>
+            
+        </tr>
+        {/volist}
+    </table>
+</div>
+
+{include file="common/foot"/}
+<script>
+    layui.use(['table','laydate','element','layer'], function() {
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var layer = layui.layer;
+        var table = layui.table, $ = layui.jquery;
+        
+        laydate.render({
+          elem: '#start',
+          type: 'month'
+        });
+        laydate.render({
+          elem: '#end',
+          type: 'month'
+        });
+        
+        //发
+        $('.reward').on('click', function() {
+            var id = $(this).attr("data");
+            layer.confirm('确定发放？', {icon: 3}, function(index) {
+                $.ajax({
+                    url:'{:url("Memberyear/reward")}',
+                    data: {id:id},
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        if (data.code == 0) {
+                            layer.msg(data.msg,{time:1000,icon:2});
+                        } else {
+                            layer.msg(data.msg,{time:1000,icon:1});
+                            location.reload();
+                        }
+                    },
+                    error:function(data){
+
+                    }
+                });
+                
+            });
+        });
+        
+        //搜索
+        $('#search').on('click', function() {
+            var start = $('#start').val();
+            var end = $('#end').val();
+        
+            $.ajax({
+                url:'{:url("Memberyear/index")}',
+                data: {start:start,end:end,ispost:1},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    if (data.code == 0) {
+                        layer.msg(data.msg,{time:1000,icon:2});
+                    } else {
+                        var html = "";
+                        for (var i=0;i<data.data.length;i++) {
+                            html += "<tr>";
+                            html += "<td>"+data.data[i].uid+"</td>";
+                            html += "<td>"+data.data[i].nickname+"</td>";
+                            html += "<td>"+data.data[i].level+"</td>";
+                            html += "<td>"+data.data[i].result+"</td>";
+                            html += "<td>"+data.data[i].reward+"</td>";
+                            html += "<td>"+data.data[i].father+"</td>";
+                            html += "<td>"+data.data[i].status+"</td>";
+                            html += "</tr>";
+                        }
+                        $('#list').append(html);
+                    }
+                },
+                error:function(data){
+                    
+                }
+            });
+        });
+        
+        //发放
+        $('#sendward').on('click', function() {
+            var start = $('#start').val();
+            var end = $('#end').val();
+        
+            $.ajax({
+                url:'{:url("Memberyear/createorder")}',
+                data: {start:start,end:end,ispost:1},
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    if (data.code == 0) {
+                        layer.msg(data.msg,{time:1000,icon:2});
+                    } else {
+                        layer.msg(data.msg,{time:1000,icon:1});
+                    }
+                },
+                error:function(data){
+                    
+                }
+            });
+        });
+        
+    });
+    
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>{$title}</title>
+    <link href="__STATIC__/bee/css/main.css?v1" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/index.css?v1" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/zl.css?v1" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="__STATIC__/bee/css/tool/honeySwitch.css" />
+    <link href="__STATIC__/bee/css/tool/swiper-4.4.1.min.css" rel="stylesheet" />
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="__STATIC__/bee/js/tool/swiper-4.4.1.min.js"></script>
+    <script src="__STATIC__/bee/js/tool/honeySwitch.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__STATIC__/bee/js/data.js" type="text/javascript" charset="utf-8"></script>
+    <script src="__STATIC__/bee/js/main.js"></script>
+</head>
+<style type="text/css">
+    #mymodal {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: rgba(0, 0, 0, .6);
+        display: none;
+    }
+    
+    .modal-main {
+        position: absolute;
+        bottom: -900px;
+        left: 0;
+        height: 75%;
+        width: 100%;
+        background-color: #fff;
+        font-size: .44rem;
+    }
+    
+    .address-title {
+        font-size: .48rem;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1rem;
+        height: 1rem;
+    }
+    
+    .close {
+        position: absolute;
+        padding: .1rem;
+        right: 0rem;
+        top: 0rem;
+        color: red;
+    }
+    
+    .optionwrapper {
+        border-bottom: 1px solid #DDDDDD;
+        display: flex;
+        padding-left: .4rem;
+        height: 1rem;
+        box-sizing: border-box;
+    }
+    
+    .option-menu {
+        padding: .1rem .1rem;
+        margin-right: .15rem;
+    }
+    
+    .active-option {
+        border-bottom: 1px solid #FF2440;
+    }
+    
+    .option-content {
+        position: absolute;
+        top: 2.2rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    
+    .option-group {
+        display: none;
+        overflow: auto;
+        height: 100%;
+    }
+    
+    .option-list {
+        padding: .2rem .2rem;
+        display: flex;
+    }
+    
+    .checked {
+        width: .15rem;
+        height: .15rem;
+        background-color: #FF304A;
+        display: inline-block;
+        margin-left: .2rem;
+        border-radius: 50%;
+        display: none;
+        margin-top: .1rem;
+    }
+    
+    .new-address-list li.moren {
+        padding: 0;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .new-address-list li.moren .title {
+        margin: 0;
+    }
+    
+    [class|=switch] {
+        width: 1rem;
+        height: .6rem;
+    }
+    
+    .switch-on .slider {
+        left: .4rem;
+    }
+    
+    .slider {
+        width: .6rem;
+        height: .6rem;
+    }
+</style>
+
+<body>
+   
+    <div class="wrapper">
+        <div class="new-address-list">
+            <ul class="clearfix">
+                <li>
+                    <p class="title">收货人</p>
+                    <input class="list-item" placeholder="请输入收货人" id="uname"/>
+                </li>
+                <li>
+                    <p class="title">手机号码</p>
+                    <input class="list-item" type="tel" placeholder="收请输入手机号码" id="mobile"/>
+                </li>
+                <li class="address-li">
+                    <p class="title">所在地区</p>
+                    <input class="input" id="address" placeholder="请选择收货地址" value="" >
+                </li>
+                <li>
+                    <p class="title">详细地址</p>
+                    <input class="list-item" placeholder="请输入详细地址" id="detail"/>
+                </li>
+                <li class="moren">
+                    <input class="input" type="hidden" id="switchInput" placeholder="请选择收货地址" value="1">
+                    <p class="title">设为默认地址 </p>
+                    <span class="switch-off" id="switchBtn"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="page-foot-btn-box">
+        <a class="page-foot-btn" href="javascript:;" onclick="submitBtn();">
+            保存
+        </a>
+    </div>
+    <section id="mymodal">
+        <div class="modal-main">
+            <p class="address-title">收货地址</p>
+            <p class="close">x</p>
+            <ul class="optionwrapper">
+                <li class="option-menu option-menu-one active-option">请选择</li>
+                <li class="option-menu option-menu-two"></li>
+                <li class="option-menu option-menu-three"></li>
+            </ul>
+            <div class="option-content">
+                <ul class="option-group option-group-one" data-index="0" style="display: block">
+                </ul>
+                <ul class="option-group option-group-two" data-index="1">
+                </ul>
+                <ul class="option-group option-group-three" data-index="2">
+                </ul>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        $("#switchBtn").click(function(e) {
+            if($(this).hasClass("switch-on")) {
+                $("#switchInput").attr("value", 0);
+            } else {
+                $("#switchInput").attr("value", 1);
+            }
+        })
+
+        $(document).ready(function() {
+            if($("#switchInput").attr("value") == 0) {
+                honeySwitch.showOff("#switchBtn")
+            } else {
+                honeySwitch.showOn("#switchBtn")
+            }
+            var newData = []; //新数据
+            var citysArray = []; //城市
+            var areaArray = []; //地区
+            var chooseMenuStr = '请选择' //添加选择title
+
+            function init() {
+                //模拟ajax
+                setTimeout(() => {
+                    newData = [...data];
+                    // 初始化省份
+                    var optionGroupOne = "";
+                    $.each(newData, function(index, el) {
+                        optionGroupOne += `<li class="option-list option-list-one">
+								<span>${newData[index]["n"]}</span>
+								<div class="checked">
+								</div>
+							</li>`
+                    });
+
+                    $(".option-group-one").html(optionGroupOne)
+
+                }, 100)
+            }
+
+            init();
+
+            $("#mymodal").on("click", ".option-menu", function() { //菜单激活
+                var i = $(this).index();
+                $(this).addClass('active-option').siblings().removeClass('active-option');
+                $(".option-group").eq(i).show().siblings().hide()
+            })
+
+            //1级 省份点击添加城市
+            $("#mymodal").on("click", ".option-list-one", function() {
+                var parentIndex = $(this).parent().attr("data-index");
+                var provinceName = $(this).text().trim();
+                var provinceIndex = $(this).index();
+                $(this).find('.checked').show();
+                $(this).siblings().find('.checked').hide();
+                // console.log(newData[provinceIndex])
+                citysArray = newData[provinceIndex]["c"];
+                $(".option-menu").eq(parentIndex).text(provinceName)
+                var cityStr = "";
+                // console.log(citysArray)
+                $.each(citysArray, function(index, el) {
+                    cityStr += `<li class="option-list option-list-two">
+						<span>${citysArray[index]["n"]}</span>
+						<div class="checked">
+						</div>
+					</li>`
+                });
+                // console.log(cityStr)
+                $(".option-group").hide();
+                $(".optionwrapper").find(".option-menu").removeClass('active-option')
+                $(".option-menu-two").html(chooseMenuStr).addClass('active-option')
+                $(".option-group-two").html(cityStr).show();
+                $(".option-group-three").html("");
+                $(".option-menu-three").html("")
+            })
+
+            //2级 城市点击添加城镇
+            $("#mymodal").on("click", ".option-list-two", function() {
+                var parentIndex = $(this).parent().attr("data-index");
+                var cityName = $(this).text().trim();
+                var cityIndex = $(this).index();
+                $(this).find('.checked').show();
+                $(this).siblings().find('.checked').hide();
+                cityArray = citysArray[cityIndex]["a"];
+                $(".option-menu").eq(parentIndex).text(cityName)
+                var areaStr = "";
+                $.each(cityArray, function(index, el) {
+                    areaStr += `<li class="option-list option-list-three">
+						<span>${cityArray[index]}</span>
+						<div class="checked">
+						</div>
+					</li>`
+                });
+                $(".option-group").hide();
+                $(".optionwrapper").find(".option-menu").removeClass('active-option')
+                $(".option-menu-three").html(chooseMenuStr).addClass('active-option')
+                $(".option-group-three").html(areaStr).show();
+            })
+            //3级 选择城镇
+            $("#mymodal").on("click", ".option-list-three", function() {
+                var areaName = $(this).text().trim();
+                var parentIndex = $(this).parent().attr("data-index");
+                var menuOne = $(".option-menu").eq(0).text();
+                var menuTwo = $(".option-menu").eq(1).text();
+                var addressVal = menuOne + " " + menuTwo + " " + areaName;
+                $(this).find('.checked').show();
+                $(this).siblings().find('.checked').hide();
+                $(".option-menu").eq(parentIndex).text(areaName)
+                $(".modal-main").animate({
+                    "bottom": "-900px"
+                }, 400);
+                setTimeout(() => {
+                    $("#mymodal").fadeOut()
+                }, 350)
+                $("#address").val(addressVal)
+            })
+
+            $(".address-li").on("click", function() {
+                $("#mymodal").show();
+                $(".modal-main").animate({
+                    "bottom": "0"
+                }, 400)
+            })
+
+            $(".close").on("click", function() {
+                $(".modal-main").animate({
+                    "bottom": "-900px"
+                }, 400);
+                setTimeout(() => {
+                    $("#mymodal").fadeOut();
+                }, 350)
+            })
+
+            $("#mymodal").on("click", function(event) {
+                var modalMain = $(".modal-main");
+                if(!modalMain.is(event.target) && modalMain.has(event.target).length === 0) {
+                    $(".modal-main").animate({
+                        "bottom": "-900px"
+                    }, 400);
+                    setTimeout(() => {
+                        $("#mymodal").fadeOut();
+                    }, 350)
+                }
+            })
+        });
+        
+        //提交
+        function submitBtn() {
+            var uname = $('#uname').val();
+            var mobile = $('#mobile').val();
+            var pro_city_reg = $('#address').val();
+            var detail = $('#detail').val();
+            var isdef = $('#switchInput').val();
+            
+            if (!uname) {
+                alert("请填写收货人姓名");
+                return false;
+            }
+            if (!mobile) {
+                alert("请填写收货人手机号");
+                return false;
+            }
+            if (!pro_city_reg) {
+                alert("请填写收货地区信息");
+                return false;
+            }
+            if (!detail) {
+                alert("请填写详细地址");
+                return false;
+            }
+            $.ajax({
+                url:"{:url('Userinfo/addaddress')}",
+                type:'post',
+                dataType:'json',
+                data:{uname:uname,mobile:mobile,pro_city_reg:pro_city_reg,detail:detail,isdef:isdef,ispost:1},
+                success:function(data){
+                    if (data.code == 1) {
+                        location.href = "{:url('userinfo/myaddress')}";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+            
+            
+        }
+        
+        
+        
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    {include file="common/head"/}
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="list-box">
+                <div class="list">
+                    <a href="#">
+                        <div class="box2 arrow">我的头像
+                            <div class="list-des"><img class="herd-img" src="{$info.avatarurl}" /></div>
+                            <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                        </div>
+                    </a>
+                    <a href="{:url('Userinfo/changename')}">
+                        <div class="box2 arrow">修改昵称
+                            <div class="list-des"><span>{$info.nickname}</span></div>
+                            <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                        </div>
+                    </a>
+                    <a href="{:url('Userinfo/changemobile')}">
+                        <div class="box2 arrow">手机号码
+                            <div class="list-des"><span>{$info.mobile}</span></div>
+                            <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="box2 ">我的服务商ID
+                            <div class="list-des"><span>{$info.serviceid}</span></div>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="box2 ">我的级别
+                            <div class="list-des"><span>{$info.level_name}</span></div>
+                        </div>
+                    </a>
+                    <a href="{:url('Userinfo/changebankname')}">
+                        <div class="box2 arrow">开户行
+                            <div class="list-des"><span>{$info.bankname}</span></div>
+                            <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                        </div>
+                    </a>
+                    <a href="{:url('Userinfo/changerealname')}">
+                        <div class="box2 arrow">开户姓名
+                            <div class="list-des"><span>{$info.realname}</span></div>
+                            <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                        </div>
+                    </a>
+                    <a href="{:url('Userinfo/changebankcode')}">
+                        <div class="box2 arrow">银行卡号
+                            <div class="list-des"><span>{$info.bankcode}</span></div>
+                            <img class="arrow_img" src="__STATIC__/bee/img/img37.png" />
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="page-foot-btn-box">
+            <a class="page-foot-btn" href="{:url('Passport/logout')}">
+                退出登录
+            </a>
+        </div>
+        <div style="height:1.45rem"></div>
+        {include file="common/footucenter"/}
+    </body>
+</html>

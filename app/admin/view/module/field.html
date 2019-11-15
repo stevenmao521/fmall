@@ -1,0 +1,202 @@
+{include file="common/head"/}
+<div class="admin-main layui-anim layui-anim-upbit">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>字段{:lang('list')}</legend>
+    </fieldset>
+    <blockquote class="layui-elem-quote">
+        <a href="{:url('fieldAdd',array('moduleid'=>input('id')))}" class="layui-btn layui-btn-small">{:lang('add')}{:lang('field')}</a>
+        <a href="{:url('index')}" class="layui-btn layui-btn-small layui-btn-primary pull-right">模型列表</a>
+    </blockquote>
+    <table class="layui-table" id="list" lay-filter="list"></table>
+</div>
+{include file="common/foot"/}
+<script type="text/html" id="isEdit">
+    {{# if(d.isedit==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="edityes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="edityes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isList">
+    {{# if(d.islist==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="listyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="listyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isSel">
+    {{# if(d.issel==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="selyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="selyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isSort">
+    {{# if(d.issort==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="sortyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="sortyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isCount">
+    {{# if(d.iscount==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="countyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="countyes"></a>
+    {{# } }}
+</script>
+<script type="text/html" id="isHide">
+    {{# if(d.ishide==1){ }}
+    <a href="javascript:" class="icon icon-checkmark green" lay-event="hideyes"></a>
+    {{# }else{  }}
+    <a href="javascript:" class="icon icon-cross red" lay-event="hideyes"></a>
+    {{# } }}
+</script>
+
+<script type="text/html" id="action">
+    {{# if(d.disable==1){ }}
+        <a href="javascript:" class="layui-btn layui-btn-mini layui-btn-danger" lay-event="stateyes">已禁用</a>
+    {{# }else if(d.disable==2){  }}
+        <a href="#" class="layui-btn layui-btn-mini layui-btn-disabled">已禁用</a>
+    {{# }else{  }}
+        <a href="javascript:" class="layui-btn layui-btn-mini layui-btn-warm" lay-event="stateyes">已启用</a>
+    {{# } }}
+    <a href="{:url('fieldEdit')}?moduleid={{d.moduleid}}&id={{d.id}}" class="layui-btn layui-btn-mini">{:lang('edit')}</a>
+
+    {{# if(d.delStatus==1){ }}
+        <a href="#" class="layui-btn layui-btn-mini layui-btn-disabled">删除</a>
+    {{# }else{  }}
+        <a href="#" class="layui-btn layui-btn-mini layui-btn-danger" lay-event="del">删除</a>
+    {{# } }}
+</script>
+<script type="text/html" id="order">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input order" value=" {{d.listorder}}" size="10" />
+</script>
+<script type="text/html" id="width">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input width" value="{{d.width}}" size="10"/>
+</script>
+<script type="text/html" id="event">
+    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input event" value="{{d.event}}" size="10"/>
+</script>
+<script>
+    layui.use('table', function() {
+        var table = layui.table, $ = layui.jquery;
+        var tableIn=table.render({
+            elem: '#list',
+            url: '{:url("field")}',
+            where: { //设定异步数据接口的参数
+                id: '{:input("id")}'
+            },
+            method: 'post',
+            cols: [[
+                {field: 'field', title: '字段名', width: 120,fixed: true},
+                {field: 'name', title: '别名', width: 100},
+                {field: 'type', title: '字段类型', width: 100},
+                {field: 'isedit', align: 'center', title: '编辑', width: 80, toolbar: '#isEdit'},
+                {field: 'islist', align: 'center', title: '列表', width: 80, toolbar: '#isList'},
+                {field: 'issel', align: 'center', title: '筛选', width: 80, toolbar: '#isSel'},
+                {field: 'issort', align: 'center', title: '排序', width: 80, toolbar: '#isSort'},
+                {field: 'iscount', align: 'center', title: '统计', width: 80, toolbar: '#isCount'},
+                {field: 'ishide', align: 'center', title: '隐藏', width: 80, toolbar: '#isHide'},
+                {field: 'event', align: 'center', title: '绑定事件', width: 80, toolbar: '#event'},
+                {field: 'width', title: '列表宽', width: 100, templet: '#width'},
+                {field: 'listorder', title: '{:lang("order")}', width: 100, sort: true,templet: '#order'},
+                {width: 190, align: 'center', toolbar: '#action'}
+            ]],
+            size: 'sm'
+        });
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'stateyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("fieldStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'del'){
+                layer.confirm('你确定要删除该字段吗', function(index){
+                    $.post("{:url('fieldDel')}",{id:data.id},function(res){
+                        if(res.code==1){
+                            layer.msg(res.msg,{time:1000,icon:1});
+                            obj.del();
+                        }else{
+                            layer.msg(res.msg,{time:1000,icon:2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else if(obj.event === 'edityes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("editStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'listyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("listStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'selyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("selStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'sortyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("sortStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'countyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("countStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }else if(obj.event === 'hideyes') {
+                loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post('{:url("hideStatus")}', {id: data.id}, function () {
+                    window.location.href = "{:url('field')}?id={:input('id')}"
+                });
+            }
+        });
+        $('body').on('blur','.order',function() {
+            var id = $(this).attr('data-id');
+            var listorder = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("listOrder")}',{id:id,listorder:listorder,moduleid:"{:input('id')}"},function(res){
+                layer.close(loading);
+                if(res.code===1){
+                    layer.msg(res.msg,{time:1000,icon:1});
+                    tableIn.reload();
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        });
+        $('body').on('blur','.width',function() {
+            var id = $(this).attr('data-id');
+            var width = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("editWidth")}',{id:id,width:width,moduleid:"{:input('id')}"},function(res){
+                layer.close(loading);
+                if(res.code===1){
+                    layer.msg(res.msg,{time:1000,icon:1});
+                    tableIn.reload();
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        });
+        $('body').on('blur','.event',function() {
+            var id = $(this).attr('data-id');
+            var event = $(this).val();
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post('{:url("editEvent")}',{id:id,event:event,moduleid:"{:input('id')}"},function(res){
+                layer.close(loading);
+                if(res.code===1){
+                    layer.msg(res.msg,{time:1000,icon:1});
+                    tableIn.reload();
+                }else{
+                    layer.msg(res.msg,{time:1000,icon:2});
+                }
+            })
+        })
+    });
+</script>

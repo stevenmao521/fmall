@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>打印模板</title>
+        <style type="text/css">
+            <!--
+            .dayin { width:1163px; height:636px;  background:url(__STATIC__/bee/img/dayin_bg.png) no-repeat top; margin:20px auto;}
+            .fl{ float:left;}
+            .ft{ clear:both}
+            .cont{padding:150px 0 0 100px; font-size:1.2rem; line-height:39px;}
+            .cont.a1{ width:500px; float:left; }
+            .name { width:210px; margin-left:100px;}
+            .add_cf { width:170px}
+            .add_ssq { width:100%; margin-left:70px; clear:both;}
+            .add_ssq span{ width:90px; float:left; text-align:center;}
+            .add_xx { width:100%; clear:both;margin-left:70px;}
+            .tel { width:210px; margin-left:100px;}
+            .danwei { width:100%; margin-left:100px;}
+            .shangpin{ margin-top:25px; margin-left:55px;}
+
+            .btn{ width:1163px; margin:20px auto; text-align:center;}
+
+            -->
+        </style>
+    </head>
+    <!--startprint-->
+    <body>
+        <div class="dayin">
+            <div class="cont">
+                <div class="a1 fl">
+                    <div class="name fl">{$admin.addrname}</div>
+                    <div class="add_cf fl">{$admin.province}</div>
+                    <div class="danwei ft">&nbsp;</div>
+                    <div class="add_ssq"><span>{$admin.province}</span><span>{$admin.city}</span><span>{$admin.area}</span></div>
+                    <div class="add_xx ft">{$admin.addrdetail}</div>
+                    <div class="tel ft">{$admin.mobile}</div>
+                    <div class="shangpin">{$name}</div>
+                </div>
+                <div class="a1 fl">
+                    <div class="name fl">{$order.addrname}</div>
+                    <div class="add_cf fl">{$admin.province}</div>
+                    <div class="danwei ft">{$order.express}</div>
+                    <div class="add_ssq"><span>{$addr.pro}</span><span>{$addr.city}</span><span>{$addr.area}</span></div>
+                    <div class="add_xx ft">{$order.addrdetail}</div>
+                    <div class="tel ft">{$addr.addrmobile}</div>
+                </div>
+            </div>
+        </div>
+        <div class="btn"><input type="button" value="打印" onclick="doPrint();"/>
+        </div>
+    </body>
+    <!--endprint-->
+</html>
+
+<script>
+    function doPrint() {
+        var sprnhtml=window.document.body.innerHTML;;   //选择要打印的内容
+        var selfhtml=window.document.body.innerHTML;; 
+        window.document.body.innerHTML = sprnhtml;
+        window.print();
+        window.document.body.innerHTML = selfhtml;
+
+    }
+</script>

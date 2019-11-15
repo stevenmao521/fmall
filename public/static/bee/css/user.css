@@ -1,0 +1,64 @@
+body {
+	background-color: white;
+}
+
+.infor-box {
+
+}
+
+.infor-head {
+	padding: .75rem .8rem 0 .8rem;
+}
+
+.infor-head .infor {
+	display: inline-block;
+	height: 2.16rem;
+	font-size: 0.7rem;
+	line-height: 0.95rem;
+	color: #36404a;
+}
+
+.infor-head .infor .gray {
+	font-size: 0.43rem;
+	color: #999999;
+}
+
+.infor-head .userheard {
+	display: block;
+	overflow: hidden;
+	float: right;
+	width: 1.62rem;
+	height: 1.62rem;
+	border-radius: 100%;
+}
+
+.wrapper .load-btn {
+	display: block;
+	margin: .55rem;
+	height: 1.35rem;
+	text-align: center;
+	line-height: 1.35rem;
+	background-color: #209e64;
+	border-radius: 0.11rem;
+	font-size: 0.49rem;
+	color: #ffffff
+}
+.group{
+	padding: .4rem 0;
+	margin: .2rem .54rem;
+	box-shadow: 0rem 0.01rem 0.41rem 0rem 
+		rgba(204, 204, 204, 0.5);
+}
+.page-foot-btn {
+
+	color: #209e64;
+	background-color: #F4F4F4 !important;
+}
+.money-history  .fensi{ width:1.2rem; !important;}
+
+.fx_bg{ background:url(../img/yaoqing_bg.jpg) no-repeat 0 0 / 100% auto; width:100%;}
+.fx { width:60%; margin:2rem auto; font-size:.4rem; text-align:center;}
+.fx_info{font-size:.45rem; line-height:.6rem;}
+.fx_text{font-size:.3rem; color:#999999;}
+.fx_head{ width:1.5rem; text-align:center; margin:0px auto 5px auto;}
+.fx_ewm{ margin-top:1rem; width:3.5rem;  margin:.8rem auto auto auto;}

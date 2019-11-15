@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>提现</title>
+    <link href="__STATIC__/bee/css/main.css?v2" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/wallet.css" rel="stylesheet" />
+
+    <link href="__STATIC__/bee/css/elegant-icons.css" rel="stylesheet" />
+    <link href="__STATIC__/bee/css/tool/swiper-4.4.1.min.css" rel="stylesheet" />
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="__STATIC__/bee/js/tool/swiper-4.4.1.min.js"></script>
+    <script src="__STATIC__/bee/js/main.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="content-warp">
+            <div class="buy-input">
+                <p class="input-tips">输入金额</p>
+                <div class="input-warp ">
+                    <span class="input-adorn">￥</span>
+                    <input class="input price" type="tel" id="money"/>
+                    <img class="icon" src="__STATIC__/bee/img/img13.png" onclick="clearit();" style="display:block;"></img>
+                </div>
+            </div>
+            <div class="buy-type">
+                <h1 class="type-title"> </h1>
+            </div>
+            <div class="buy-btn" onclick="getcash();">申请提现</div>
+        </div>
+        <div class="gray-line"></div>
+        <div class="content-warp">
+            <div class="buy-declare">
+                <h1 class="declare-title">说明</h1>
+                <div class="declare-list">
+                    <p class="declare-text">1. 提现金额不能大于个人账户中的可提现金额；</p>
+                    <p class="declare-text">2. 提现金额只能是50的倍数；</p>
+                    <p class="declare-text">3. 请在个人资料中绑定银行卡；</p>
+                    <p class="declare-text">4. 提现申请将在24小时内审核。如有疑问，请致电：023-68686868</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    
+    function getcash() {
+        if(confirm('是否确定提现申请')==true){
+            var money = $('#money').val();
+            if (checkInt(money) == false) {
+                alert("金额输入不正确");
+                return false;
+            }
+            if (money % 50 != 0) {
+                alert("取现金额只能是50的整数");
+                return false;
+            }
+
+            //提现
+            $.ajax({
+                url:"{:url('userinfo/checkcash')}",
+                type:'post',
+                dataType:'json',
+                data:{money:money},
+                success:function(data){
+                    if (data.code == 1) {
+                        alert(data.msg);
+                        location.href = "{:url('userinfo/mywallet',array('type'=>2))}";
+                    } else if (data.code == 2) {
+                        alert(data.msg);
+                        location.href = "{:url('userinfo/info')}";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    }
+    
+    //正整数
+    function checkInt(e) {
+        var re = new RegExp("^[0-9]*[1-9][0-9]*$");
+        if (!re.test(e)) {
+            return false;
+        }
+    }
+    
+    function clearit() {
+        $('#money').val("");
+    }
+
+</script>

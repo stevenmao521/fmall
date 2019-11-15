@@ -1,0 +1,6 @@
+#tabs-content .panel{
+	display: none;
+}
+#tabs-content .panel.active{
+	display: block;
+}
