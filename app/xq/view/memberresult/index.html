@@ -4,7 +4,7 @@
         <ul class="layui-tab-title">
             <li class="layui-this"><a href='{:url("index")}'>{:lang('list')}</a></li>
             <li><a href='{:url("log")}'>{:lang('loglist')}</a></li>
-            <li><a href='{:url("trash")}'>{:lang('trash')}</a></li>
+            <!--<li><a href='{:url("trash")}'>{:lang('trash')}</a></li>-->
         </ul>
     </div>
     
@@ -14,8 +14,9 @@
             {$html_str}
         </div>
         <blockquote class="layui-elem-quote">
-            <button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="delAll">{:lang('delall')}</button>
             <!--
+            <button type="button" class="layui-btn layui-btn-small layui-btn-danger" id="delAll">{:lang('delall')}</button>
+            
             <button type="button" class="layui-btn layui-btn-small layui-btn-primary" id="export">{:lang('export')}</button>
             <a href="{:url('add')}" class="layui-btn layui-btn-small layui-bg-blue">{:lang('add')}</a>
             -->
@@ -49,7 +50,7 @@
     <!--
     <a href="{:url('edit')}?id={{d.id}}" class="layui-btn layui-btn-mini">{:lang('edit')}</a>
     -->
-    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">{:lang('del')}</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">{:lang('del')}</a>-->
 </script>
 <!--字段js模版-->
 {$js_tmp}

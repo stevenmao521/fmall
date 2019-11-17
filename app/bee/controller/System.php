@@ -74,7 +74,7 @@ class System extends Common {
                 $bottles = $v['bottles'];
                 
                 #处理提成
-                $this->doachieve($uid, $v['isrebate'], $v);
+                #$this->doachieve($uid, $v['isrebate'], $v);
                 
                 #处理业绩
                 #$this->doresult($uid, $bottles);
